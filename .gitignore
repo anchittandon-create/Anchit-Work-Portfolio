@@ -1,0 +1,21 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local env
+.env
+.env.local
+.env*.local
+
+# Vercel
+.vercel
+
+# Dependencies (if you add any later)
+node_modules/
