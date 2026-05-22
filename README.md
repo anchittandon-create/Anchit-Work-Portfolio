@@ -35,7 +35,7 @@ Capacitor wraps that same `index.html` into native iOS and Android apps.
 ## Running locally
 
 ```bash
-# 1. Install Capacitor deps (only needed for native builds)
+# 1. Install deps (only needed for native builds)
 npm install
 
 # 2. Serve the site locally (any port)
@@ -45,32 +45,42 @@ npm run dev          # → http://localhost:5173
 
 ## Native apps — iOS + Android via Capacitor
 
-> The container that generates this repo doesn't have Xcode or Android Studio.
-> You'll do the final steps on your own machine (macOS for iOS, any OS for Android).
+> The `android/` and `ios/` folders are already scaffolded and committed.
+> You only need to install deps + `pod install` on a Mac to build the iOS app.
 
-### One-time setup
+### How it's wired
 
-```bash
-# 1. Install dependencies (Node 18+)
-npm install
-
-# 2. Add native platforms (one-time per platform)
-npx cap add ios          # generates the ios/ folder (needs macOS + Xcode)
-npx cap add android      # generates the android/ folder (needs Android Studio)
-
-# 3. Sync the web assets into the native projects
-npx cap sync
-```
+- `index.html`, `manifest.json`, `sw.js`, `icons/` live at the **repo root** (so Vercel can serve them as a static site).
+- `npm run build` runs `scripts/build-www.mjs`, which mirrors those files into `www/`.
+- Capacitor's `webDir` is set to `www`, so `npx cap sync` copies from there into the native projects (`android/app/src/main/assets/public/` and `ios/App/App/public/`).
 
 ### Every time you change web code
 
 ```bash
-npx cap sync             # copies index.html + assets into iOS + Android projects
+npm run cap:sync     # = build-www + cap sync (refreshes both platforms)
 ```
+
+### Regenerating icons & splash screens
+
+Source assets live in `assets/` (1024×1024 icon + 2732×2732 splash, light + dark). After editing those:
+
+```bash
+npx capacitor-assets generate --android --ios \
+  --iconBackgroundColor "#FF4D1F" \
+  --iconBackgroundColorDark "#0F0D0A" \
+  --splashBackgroundColor "#FBF5EC" \
+  --splashBackgroundColorDark "#0F0D0A"
+```
+
+This regenerates all 56 Android + 7 iOS icon/splash assets.
 
 ### iOS build & submit (App Store)
 
 ```bash
+# One-time, on macOS:
+cd ios/App
+pod install
+cd ../..
 npx cap open ios         # opens Xcode
 ```
 

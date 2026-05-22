@@ -1,8 +1,7 @@
 {
   "appId": "com.anchittandon.portfolio",
   "appName": "Anchit",
-  "webDir": ".",
-  "bundledWebRuntime": false,
+  "webDir": "www",
   "server": {
     "androidScheme": "https",
     "iosScheme": "anchit",
