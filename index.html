@@ -170,6 +170,26 @@
   .chat-send svg { width: 16px; height: 16px; }
   .input-hint { text-align: center; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-mute); margin-top: 10px; text-transform: uppercase; }
 
+  /* CHAT HERO — visible snapshot above the conversation */
+  .chat-hero { padding: 4px 0 28px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+  .hero-positioning { font-family: var(--serif); font-weight: 300; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 24px; max-width: 720px; }
+  .hero-positioning em { font-style: italic; color: var(--accent); font-weight: 400; }
+  .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 20px; }
+  @media (max-width: 720px) { .hero-stats { grid-template-columns: repeat(2, 1fr); } }
+  .hero-stat { padding: 18px 14px; border-right: 1px solid var(--rule); transition: background 0.3s ease; }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat:hover { background: var(--accent-soft); }
+  @media (max-width: 720px) {
+    .hero-stat:nth-child(2n) { border-right: none; }
+    .hero-stat:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+  }
+  .hero-stat .num { font-family: var(--serif); font-weight: 300; font-size: clamp(24px, 2.6vw, 32px); line-height: 1; letter-spacing: -0.03em; color: var(--ink); }
+  .hero-stat .num em { font-style: italic; color: var(--accent); font-weight: 400; }
+  .hero-stat .label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-dim); margin-top: 8px; line-height: 1.5; }
+  .hero-current { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink-dim); padding: 4px 10px 4px 4px; }
+  .hero-current .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 2.4s ease-in-out infinite; flex-shrink: 0; }
+  .hero-current strong { color: var(--ink); font-weight: 500; }
+
   /* PANELS */
   .panel-header { padding: 32px 40px 24px; border-bottom: 1px solid var(--rule); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10; }
   .panel-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
@@ -266,6 +286,12 @@
   .meta-block li { padding: 9px 0; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; color: var(--ink); gap: 12px; }
   .meta-block li span:last-child { font-family: var(--mono); font-size: 10.5px; color: var(--ink-dim); text-align: right; flex-shrink: 0; }
 
+  /* About → embedded timeline */
+  .about-timeline { margin-top: 72px; padding-top: 48px; border-top: 1px solid var(--rule); }
+  .about-timeline-head { margin-bottom: 24px; }
+  .about-timeline-title { font-family: var(--serif); font-weight: 300; font-size: clamp(24px, 3.4vw, 36px); line-height: 1.15; letter-spacing: -0.025em; color: var(--ink); max-width: 900px; margin-top: 8px; }
+  .about-timeline-title em { font-style: italic; color: var(--accent); font-weight: 400; }
+
   /* Timeline */
   .timeline-item { display: grid; grid-template-columns: 160px 1fr; gap: 32px; padding: 22px 0; border-bottom: 1px solid var(--rule); }
   @media (max-width: 720px) { .timeline-item { grid-template-columns: 1fr; gap: 6px; } }
@@ -353,11 +379,6 @@
         <span class="nav-label">About</span>
       </button>
 
-      <button class="nav-item" data-view="experience" data-label="Experience">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-        <span class="nav-label">Experience</span>
-      </button>
-
       <button class="nav-item" data-view="contact" data-label="Contact">
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
         <span class="nav-label">Contact</span>
@@ -395,7 +416,18 @@
         <p class="chat-subtitle">Ask me anything — about the work, the side projects, or what I'm building next.</p>
       </div>
 
-      <div class="chat-body" id="chatBody"></div>
+      <div class="chat-body" id="chatBody">
+        <div class="chat-hero">
+          <div class="hero-positioning">I build consumer products that <em>move the funnel</em>.</div>
+          <div class="hero-stats">
+            <div class="hero-stat"><div class="num"><em>5+</em></div><div class="label">Years in product</div></div>
+            <div class="hero-stat"><div class="num"><em>5×</em></div><div class="label">MRR growth, Assisted Sales</div></div>
+            <div class="hero-stat"><div class="num">₹3<em>Cr</em>+</div><div class="label">ARR, ET Markets revamp</div></div>
+            <div class="hero-stat"><div class="num"><em>4</em></div><div class="label">Side projects live</div></div>
+          </div>
+          <div class="hero-current"><span class="dot"></span>Currently building <strong>&nbsp;Times Internet Half Marathon</strong>&nbsp;· launches March 2026</div>
+        </div>
+      </div>
 
       <div class="chip-row" id="chipRow"></div>
 
@@ -755,22 +787,19 @@
             <div class="meta-block"><h4>Stack</h4><ul><li><span>Figma, JIRA</span><span>Design / Plan</span></li><li><span>GA, Firebase</span><span>Measure</span></li><li><span>React, TS, Supabase</span><span>Build</span></li><li><span>GCP, LLM tools</span><span>Ship</span></li></ul></div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- EXPERIENCE -->
-    <div class="panel" id="panel-experience">
-      <div class="panel-header">
-        <div class="panel-eyebrow">The long version</div>
-        <h1 class="panel-title">Five-plus years, three titles, <em>one company</em> — and counting.</h1>
-      </div>
-      <div class="panel-body">
-        <div class="timeline-item"><div class="timeline-time">Apr 2025 → Now</div><div class="timeline-content"><h4>Senior Product Manager</h4><div class="org">Times Internet</div><p>Owning Times Internet Half Marathon end-to-end. Scaling Assisted Sales and AI-enabled growth tooling across Economic Times properties.</p></div></div>
-        <div class="timeline-item"><div class="timeline-time">Oct 2023 — Mar 2025</div><div class="timeline-content"><h4>Product Manager</h4><div class="org">Times Internet</div><p>Led the ET Markets revamp across web and apps. Launched Times Health+ subscriptions. Scaled Assisted Sales from ₹15L to ₹80L MRR.</p></div></div>
-        <div class="timeline-item"><div class="timeline-time">Jun 2022 — Oct 2023</div><div class="timeline-content"><h4>Associate Product Manager</h4><div class="org">Times Internet</div><p>Made the jump from engineering to product. Shipped discovery, screeners, and portfolios for ET Markets — and learned the funnel the hard way.</p></div></div>
-        <div class="timeline-item"><div class="timeline-time">Mar 2022 — Jun 2022</div><div class="timeline-content"><h4>Software Engineer</h4><div class="org">Citymall</div><p>Data pipelines and backend systems for a fast-moving consumer commerce platform.</p></div></div>
-        <div class="timeline-item"><div class="timeline-time">Apr 2020 — Mar 2022</div><div class="timeline-content"><h4>Software Engineer</h4><div class="org">Tuple Technologies</div><p>Built and scaled backend services for consumer-facing apps. Acted as Product Owner for an early-stage live sports commentary product — the training ground for everything that came next.</p></div></div>
-        <div class="timeline-item"><div class="timeline-time">2016 — 2020</div><div class="timeline-content"><h4>B.Tech, Computer Science &amp; Engineering</h4><div class="org">Vellore Institute of Technology</div><p>Where the engineering brain got built.</p></div></div>
+        <div class="about-timeline">
+          <div class="about-timeline-head">
+            <div class="panel-eyebrow">The long version</div>
+            <h2 class="about-timeline-title">Five-plus years, three titles, <em>one company</em> — and counting.</h2>
+          </div>
+          <div class="timeline-item"><div class="timeline-time">Apr 2025 → Now</div><div class="timeline-content"><h4>Senior Product Manager</h4><div class="org">Times Internet</div><p>Owning Times Internet Half Marathon end-to-end. Scaling Assisted Sales and AI-enabled growth tooling across Economic Times properties.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">Oct 2023 — Mar 2025</div><div class="timeline-content"><h4>Product Manager</h4><div class="org">Times Internet</div><p>Led the ET Markets revamp across web and apps. Launched Times Health+ subscriptions. Scaled Assisted Sales from ₹15L to ₹80L MRR.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">Jun 2022 — Oct 2023</div><div class="timeline-content"><h4>Associate Product Manager</h4><div class="org">Times Internet</div><p>Made the jump from engineering to product. Shipped discovery, screeners, and portfolios for ET Markets — and learned the funnel the hard way.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">Mar 2022 — Jun 2022</div><div class="timeline-content"><h4>Software Engineer</h4><div class="org">Citymall</div><p>Data pipelines and backend systems for a fast-moving consumer commerce platform.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">Apr 2020 — Mar 2022</div><div class="timeline-content"><h4>Software Engineer</h4><div class="org">Tuple Technologies</div><p>Built and scaled backend services for consumer-facing apps. Acted as Product Owner for an early-stage live sports commentary product — the training ground for everything that came next.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">2016 — 2020</div><div class="timeline-content"><h4>B.Tech, Computer Science &amp; Engineering</h4><div class="org">Vellore Institute of Technology</div><p>Where the engineering brain got built.</p></div></div>
+        </div>
       </div>
     </div>
 
@@ -831,9 +860,10 @@
   const navItems = document.querySelectorAll('.nav-item');
   const panels = document.querySelectorAll('.panel');
   const mainView = document.querySelector('main.view');
-  const ALL_VIEWS = ['chat','work','projects','about','experience','contact','project-yaara','project-music','project-telesuite','project-lifeengine'];
+  const ALL_VIEWS = ['chat','work','projects','about','contact','project-yaara','project-music','project-telesuite','project-lifeengine'];
 
   function switchView(viewName) {
+    if (viewName === 'experience') viewName = 'about';
     if (!ALL_VIEWS.includes(viewName)) return;
     // For project subpages, highlight the parent "Side projects" nav AND mark the sub-item active
     navItems.forEach(n => {
@@ -1073,7 +1103,7 @@
 
   // First message + initial chips
   setTimeout(() => {
-    addBot("I'm <strong>Anchit Tandon</strong> — Senior PM at Times Internet. I scaled Assisted Sales 5× (₹15L → ₹80L MRR), led the ET Markets revamp (₹3Cr ARR), and I'm currently building the Times Internet Half Marathon from scratch. Ask me anything, or browse the <a data-nav='work'>work</a>, <a data-nav='projects'>side projects</a>, or <a data-nav='about'>about me</a>.");
+    addBot("That's the snapshot. Ask me for the texture — the <a data-nav='work'>work</a>, the <a data-nav='projects'>side projects</a>, the funnel decisions, or what I'm figuring out next.");
     renderChips(DEFAULT_CHIPS);
   }, 300);
 
