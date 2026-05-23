@@ -2200,6 +2200,7 @@
 
     closeSidebar();
     document.querySelector('.view.active')?.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
     history.replaceState(null, '', '#' + viewName);
     document.dispatchEvent(new CustomEvent('viewChanged', { detail: viewName }));
 
@@ -2448,12 +2449,12 @@
       }
 
       if (scroll) {
-        // scroll the About view panel to this node
-        const view = document.getElementById('view-about');
-        if (view) {
-          const nodeTop = node.offsetTop - 80;
-          view.scrollTo({ top: nodeTop, behavior: 'smooth' });
-        }
+        // allow the open animation to start, then scroll
+        setTimeout(() => {
+          const rect = node.getBoundingClientRect();
+          const offset = rect.top + window.scrollY - 96;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+        }, 60);
       }
     }
 
@@ -2492,23 +2493,21 @@
     });
 
     // Sync arc active state as user scrolls through lifecycle nodes
-    const view = document.getElementById('view-about');
-    if (view) {
-      view.addEventListener('scroll', () => {
-        const nodes = document.querySelectorAll('.lifecycle-node[data-phase]');
-        let closest = null, minDist = Infinity;
-        nodes.forEach(n => {
-          const dist = Math.abs(n.getBoundingClientRect().top - window.innerHeight * 0.4);
-          if (dist < minDist) { minDist = dist; closest = n; }
+    window.addEventListener('scroll', () => {
+      if (!document.getElementById('view-about')?.classList.contains('active')) return;
+      const nodes = document.querySelectorAll('.lifecycle-node[data-phase]');
+      let closest = null, minDist = Infinity;
+      nodes.forEach(n => {
+        const dist = Math.abs(n.getBoundingClientRect().top - window.innerHeight * 0.35);
+        if (dist < minDist) { minDist = dist; closest = n; }
+      });
+      if (closest) {
+        const phase = closest.dataset.phase;
+        document.querySelectorAll('.career-phase-seg').forEach(s => {
+          s.classList.toggle('arc-active', s.dataset.targetPhase === phase);
         });
-        if (closest) {
-          const phase = closest.dataset.phase;
-          document.querySelectorAll('.career-phase-seg').forEach(s => {
-            s.classList.toggle('arc-active', s.dataset.targetPhase === phase);
-          });
-        }
-      }, { passive: true });
-    }
+      }
+    }, { passive: true });
 
     const track = document.getElementById('lifecycleTrack');
     const fill = document.getElementById('lifecycleSpineFill');
@@ -2562,14 +2561,12 @@
     const bar = document.getElementById('scrollProgress');
     if (!bar) return;
     function update() {
-      const view = document.querySelector('.view.active');
-      if (!view) return;
-      const scrolled = view.scrollTop;
-      const total = view.scrollHeight - view.clientHeight;
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
       bar.style.width = (total > 0 ? Math.min(scrolled / total, 1) * 100 : 0) + '%';
     }
-    document.querySelectorAll('.view').forEach(v => v.addEventListener('scroll', update, { passive: true }));
-    document.addEventListener('viewChanged', update);
+    window.addEventListener('scroll', update, { passive: true });
+    document.addEventListener('viewChanged', () => { bar.style.width = '0'; });
   })();
 
   /* floating year removed — phase separators already show the date context */
