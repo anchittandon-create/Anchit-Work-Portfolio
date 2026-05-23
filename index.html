@@ -503,7 +503,7 @@
   }
   .work-num {
     font-family: var(--font-mono); font-size: 12px; font-weight: 500;
-    letter-spacing: 0.1em; color: var(--ink-mute); padding-top: 8px;
+    letter-spacing: 0.1em; color: var(--ink-dim); padding-top: 8px;
   }
   .work-item:hover .work-num { color: var(--primary); }
   .work-content h3 {
@@ -526,7 +526,7 @@
   }
   @media (max-width: 720px) { .work-meta { text-align: left; min-width: 0; } }
   .work-meta .year { color: var(--primary); font-weight: 500; margin-bottom: 6px; }
-  .work-meta .impact { font-size: 10px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.08em; }
+  .work-meta .impact { font-size: 10px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
 
   /* ============ BUILDS (Side projects) ============ */
   .builds-grid {
@@ -612,7 +612,7 @@
   }
   .project-meta > div { display: flex; flex-direction: column; gap: 4px; }
   .project-meta .label {
-    font-size: 10px; color: var(--ink-mute);
+    font-size: 10px; color: var(--ink-dim);
     text-transform: uppercase; letter-spacing: 0.12em;
   }
 
@@ -690,7 +690,7 @@
   .meta-block h4 {
     font-family: var(--font-mono); font-size: 10px; font-weight: 500;
     letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--ink-mute); margin-bottom: 14px;
+    color: var(--ink-dim); margin-bottom: 14px;
   }
   .meta-block ul { list-style: none; }
   .meta-block li {
@@ -714,7 +714,7 @@
   @media (max-width: 720px) { .timeline-item { grid-template-columns: 1fr; gap: 8px; } }
   .timeline-time {
     font-family: var(--font-mono); font-size: 12px; font-weight: 500;
-    letter-spacing: 0.05em; color: var(--ink-mute); padding-top: 6px;
+    letter-spacing: 0.05em; color: var(--ink-dim); padding-top: 6px;
   }
   .timeline-item:hover .timeline-time { color: var(--primary); }
   .timeline-content h4 {
@@ -749,7 +749,7 @@
   .contact-card-text .label {
     font-family: var(--font-mono); font-size: 10px; font-weight: 500;
     letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--ink-mute); margin-bottom: 6px;
+    color: var(--ink-dim); margin-bottom: 6px;
   }
   .contact-card-text .value {
     font-family: var(--font-display); font-size: clamp(18px, 1.9vw, 22px);
@@ -762,7 +762,7 @@
     border-top: 1px solid var(--rule); margin-top: 80px;
     padding: 40px var(--gutter) calc(40px + var(--safe-bottom));
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-    font-family: var(--font-mono); font-size: 11px; color: var(--ink-mute);
+    font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim);
     letter-spacing: 0.08em; text-transform: uppercase;
   }
   footer a { color: var(--ink-dim); transition: color 0.2s; }
@@ -833,51 +833,37 @@
   }
   .tilt-card:hover::after { opacity: 1; }
 
-  /* ============ VOICE PLAYER ============ */
-  .voice-player {
-    position: fixed; bottom: calc(32px + var(--safe-bottom)); right: 32px;
-    z-index: 150; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  /* ============ VOICE — AMBIENT INDICATOR ============ */
+  .audio-ambient {
+    position: fixed; bottom: calc(28px + var(--safe-bottom)); right: 28px;
+    z-index: 150; display: flex; align-items: center; gap: 8px;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.5s ease;
   }
-  .voice-label {
-    background: var(--ink); color: var(--bg);
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 6px 12px; border-radius: 8px; white-space: nowrap;
-    opacity: 0; transform: translateY(4px) translateX(4px);
-    transition: all 0.2s ease; pointer-events: none;
+  .audio-ambient.active { opacity: 1; }
+  .audio-ambient-bars {
+    display: flex; align-items: flex-end; gap: 2px; height: 18px;
   }
-  .voice-player:hover .voice-label { opacity: 1; transform: translateY(0) translateX(0); }
-  .voice-btn {
-    width: 52px; height: 52px; border-radius: 50%;
-    background: var(--primary); color: #FFF;
-    display: inline-flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 20px rgba(255,77,31,0.4);
-    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    border: none; cursor: pointer; position: relative;
+  .audio-ambient-bars span {
+    display: block; width: 3px; border-radius: 2px;
+    background: var(--primary);
+    animation: waveBar 1.2s ease-in-out infinite;
   }
-  .voice-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(255,77,31,0.5); }
-  .voice-btn.playing { background: var(--accent); box-shadow: 0 4px 20px rgba(0,181,132,0.4); }
-  .voice-btn svg { width: 22px; height: 22px; transition: all 0.2s; }
-  .voice-icon-play { display: block; }
-  .voice-icon-stop { display: none; }
-  .voice-btn.playing .voice-icon-play { display: none; }
-  .voice-btn.playing .voice-icon-stop { display: block; }
-  .voice-rings {
-    position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  .audio-ambient-bars span:nth-child(1) { height: 8px;  animation-delay: 0s; }
+  .audio-ambient-bars span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+  .audio-ambient-bars span:nth-child(3) { height: 18px; animation-delay: 0.1s; }
+  .audio-ambient-bars span:nth-child(4) { height: 10px; animation-delay: 0.3s; }
+  .audio-ambient-bars span:nth-child(5) { height: 6px;  animation-delay: 0.15s; }
+  @keyframes waveBar {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.6; }
+    50%       { transform: scaleY(1);   opacity: 1; }
   }
-  .voice-ring {
-    position: absolute; inset: -4px; border-radius: 50%;
-    border: 2px solid var(--primary); opacity: 0;
-  }
-  .voice-btn.playing .voice-ring { animation: voiceRing 1.8s ease-out infinite; }
-  .voice-btn.playing .voice-ring:nth-child(2) { animation-delay: 0.6s; }
-  .voice-btn.playing .voice-ring:nth-child(3) { animation-delay: 1.2s; }
-  .voice-btn.playing .voice-ring { border-color: var(--accent); }
-  @keyframes voiceRing {
-    0% { opacity: 0.7; transform: scale(1); }
-    100% { opacity: 0; transform: scale(1.9); }
+  .audio-ambient-label {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-dim);
   }
   @media (max-width: 820px) {
-    .voice-player { bottom: calc(24px + var(--safe-bottom)); right: 18px; }
+    .audio-ambient { bottom: calc(20px + var(--safe-bottom)); right: 16px; }
   }
 
   /* ============ CAREER ARC SCRUBBER ============ */
@@ -887,7 +873,7 @@
   }
   .career-arc-label {
     font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute);
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-dim);
     margin-bottom: 16px;
   }
   .career-arc-track {
@@ -979,13 +965,13 @@
   }
   .lifecycle-title em { font-style: italic; color: var(--primary); }
   .lifecycle-org {
-    font-family: var(--font-mono); font-size: 12px; color: var(--ink-mute); margin-top: 4px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink-dim); margin-top: 4px;
   }
   .lifecycle-right {
     display: flex; align-items: center; gap: 12px; flex-shrink: 0; padding-top: 2px;
   }
   .lifecycle-date {
-    font-family: var(--font-mono); font-size: 11px; color: var(--ink-mute); text-align: right;
+    font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); text-align: right;
     white-space: nowrap;
   }
   .lifecycle-chevron {
@@ -1111,20 +1097,20 @@
   .floating-year-inner {
     font-family: var(--font-display); font-size: clamp(56px, 10vw, 110px);
     font-weight: 300; font-style: italic;
-    color: var(--rule); letter-spacing: -0.03em; line-height: 1;
+    color: var(--ink); letter-spacing: -0.03em; line-height: 1;
     user-select: none; transition: color 0.4s ease, opacity 0.4s;
-    opacity: 0.5;
+    opacity: 0.07;
   }
-  .floating-year-inner.active { color: var(--primary-soft); opacity: 1; }
+  .floating-year-inner.active { color: var(--primary); opacity: 0.13; }
   @media (max-width: 720px) { .floating-year { display: none; } }
 
   /* ============ CAREER PHASE SEPARATOR ============ */
   .lifecycle-phase-sep {
     display: flex; align-items: center; gap: 12px;
     padding: 8px 0 8px 44px; margin: 8px 0;
-    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--ink-mute); position: relative; z-index: 3;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-dim); position: relative; z-index: 3;
   }
   .lifecycle-phase-sep::before {
     content: ''; width: 24px; height: 1px; background: var(--rule-strong);
@@ -1135,7 +1121,7 @@
   .work-item { cursor: default; transition: background 0.3s, box-shadow 0.3s; }
   .work-item:hover { background: var(--bg-elev); box-shadow: var(--shadow-sm); border-radius: 16px; }
   .work-impact-bar { margin-top: 10px; }
-  .work-impact-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .work-impact-label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
   .work-impact-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .work-impact-chip {
     font-family: var(--font-mono); font-size: 11px; font-weight: 500;
@@ -1143,8 +1129,11 @@
     background: var(--accent-soft); color: var(--accent);
     letter-spacing: 0.05em;
   }
+  [data-theme="light"] .work-impact-chip { color: #007A58; }
   .work-impact-chip.red { background: var(--primary-soft); color: var(--primary); }
-  .work-impact-chip.gold { background: rgba(181,135,10,0.12); color: #B5870A; }
+  [data-theme="light"] .work-impact-chip.red { color: #C03010; }
+  .work-impact-chip.gold { background: rgba(181,135,10,0.14); color: #7A5400; }
+  [data-theme="dark"] .work-impact-chip.gold { color: #E0B040; }
 
   /* ============ PRODUCTS SHIPPED GRID (ATS + visual) ============ */
   .products-grid {
@@ -1159,8 +1148,9 @@
   }
   .product-chip:hover { transform: translateY(-4px); box-shadow: var(--shadow-sm); border-color: var(--primary); }
   .product-chip-name { font-size: 14px; font-weight: 500; color: var(--ink); }
-  .product-chip-co { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-mute); }
+  .product-chip-co { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-dim); }
   .product-chip-metric { font-family: var(--font-mono); font-size: 12px; color: var(--primary); margin-top: 2px; }
+  [data-theme="light"] .product-chip-metric { color: #C03010; }
   @media (max-width: 600px) { .products-grid { grid-template-columns: 1fr 1fr; } }
 
   /* ============ ATS KEYWORDS (visible on page, semantic HTML) ============ */
@@ -1168,11 +1158,11 @@
     margin-top: 72px; padding: 28px 32px; border-radius: 20px;
     background: var(--bg-elev); border: 1px solid var(--rule);
   }
-  .ats-section-head { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-mute); margin-bottom: 12px; }
+  .ats-section-head { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-dim); margin-bottom: 12px; }
   .ats-tags { display: flex; flex-wrap: wrap; gap: 7px; }
   .ats-tag {
     font-size: 12px; padding: 5px 12px; border-radius: 99px;
-    background: var(--bg-deep); color: var(--ink-dim); border: 1px solid var(--rule);
+    background: var(--bg-deep); color: var(--ink-dim); border: 1px solid var(--rule-strong);
   }
 </style>
 </head>
@@ -1812,7 +1802,7 @@
       <div class="lifecycle">
         <div class="section-head reveal">
           <div class="eyebrow">Career lifecycle · Click any role to expand</div>
-          <h2 class="display-md">Five-plus years, three titles, <em>one company.</em></h2>
+          <h2 class="display-md">Two companies. Four titles. <em>One thread.</em></h2>
         </div>
         <div class="lifecycle-track" id="lifecycleTrack">
           <div class="floating-year" aria-hidden="true"><div class="floating-year-inner" id="floatingYear">2026</div></div>
@@ -2073,19 +2063,13 @@
 </main>
 
 <!-- ============ VOICE PLAYER ============ -->
-<div class="voice-player" id="voicePlayer">
-  <div class="voice-label" id="voiceLabel">Listen to Anchit</div>
-  <button class="voice-btn" id="voiceBtn" aria-label="Listen to Anchit narrate this section">
-    <div class="voice-rings">
-      <div class="voice-ring"></div>
-      <div class="voice-ring"></div>
-      <div class="voice-ring"></div>
-    </div>
-    <svg class="voice-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    <svg class="voice-icon-stop" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
-  </button>
-  <!-- Anchit's voice — one recording plays across all views -->
-  <audio id="audio-anchit" src="audio/anchit.m4a" preload="none"></audio>
+<!-- Ambient audio — auto-plays after first user interaction -->
+<audio id="audio-anchit" src="audio/anchit.m4a" preload="none"></audio>
+<div class="audio-ambient" id="audioAmbient" aria-hidden="true" title="Anchit's voice narration playing">
+  <span class="audio-ambient-label">Playing</span>
+  <div class="audio-ambient-bars">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
 </div>
 
 <!-- Cursor glow -->
@@ -2157,7 +2141,6 @@
     closeSidebar();
     document.querySelector('.view.active')?.scrollTo({ top: 0, behavior: 'instant' });
     history.replaceState(null, '', '#' + viewName);
-    if (window.__setVoiceView) window.__setVoiceView(viewName);
     document.dispatchEvent(new CustomEvent('viewChanged', { detail: viewName }));
 
     // Re-trigger reveals for the new view
@@ -2410,29 +2393,44 @@
     }
   })();
 
-  /* ============ VOICE PLAYER ============ */
+  /* ============ AMBIENT VOICE — auto-plays once after first user interaction ============ */
   (function() {
-    const btn = document.getElementById('voiceBtn');
-    const label = document.getElementById('voiceLabel');
     const audio = document.getElementById('audio-anchit');
-    if (!btn || !audio) return;
+    const indicator = document.getElementById('audioAmbient');
+    if (!audio || !indicator) return;
 
-    function stop() { audio.pause(); audio.currentTime = 0; btn.classList.remove('playing'); }
+    let played = false;
+    let engaged = false;
 
-    btn.addEventListener('click', () => {
-      if (btn.classList.contains('playing')) { stop(); return; }
-      btn.classList.add('playing');
-      audio.play().catch(() => btn.classList.remove('playing'));
+    function showIndicator() { indicator.classList.add('active'); }
+    function hideIndicator() { indicator.classList.remove('active'); }
+
+    function tryPlay() {
+      if (played || !engaged) return;
+      played = true;
+      audio.play().then(showIndicator).catch(() => { played = false; });
+    }
+
+    audio.addEventListener('ended', hideIndicator);
+    audio.addEventListener('pause', hideIndicator);
+    audio.addEventListener('error', hideIndicator);
+
+    function onEngaged() {
+      if (engaged) return;
+      engaged = true;
+      ['click','keydown','touchstart'].forEach(t => document.removeEventListener(t, onEngaged));
+      // Small delay so the first click (e.g. a nav link) completes its action first
+      setTimeout(tryPlay, 800);
+    }
+
+    ['click','keydown','touchstart'].forEach(t =>
+      document.addEventListener(t, onEngaged, { once: false, passive: true })
+    );
+
+    // Also try on each view change — if already engaged, play immediately
+    document.addEventListener('viewChanged', () => {
+      if (engaged && !played) setTimeout(tryPlay, 600);
     });
-    audio.addEventListener('ended', () => btn.classList.remove('playing'));
-    audio.addEventListener('error', () => btn.classList.remove('playing'));
-
-    window.__setVoiceView = function(v) {
-      const names = { home:'Home', work:'Work', builds:'Builds', about:'About', contact:'Contact' };
-      const key = v.startsWith('project-') ? 'Builds' : (names[v] || 'Anchit');
-      label.textContent = 'Hear Anchit · ' + key;
-      stop();
-    };
   })();
 
   /* ============ SCROLL PROGRESS BAR ============ */
