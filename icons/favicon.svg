@@ -1,4 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#FF4D1F"/>
-  <text x="256" y="352" font-family="'Fraunces', 'Times New Roman', serif" font-size="320" font-weight="500" font-style="italic" fill="#FBF5EC" text-anchor="middle">A</text>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1A15"/>
+      <stop offset="100%" stop-color="#0D0B09"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <rect x="54" y="54" width="80" height="6" rx="3" fill="#FF4D1F" opacity="0.95"/>
+  <text x="224" y="372"
+        font-family="Georgia,'Times New Roman',serif"
+        font-size="360" font-weight="700" font-style="italic"
+        fill="#F5EFE3" text-anchor="middle"
+        letter-spacing="-18">A</text>
+  <text x="422" y="420"
+        font-family="Georgia,'Times New Roman',serif"
+        font-size="124" font-weight="400" font-style="italic"
+        fill="#FF4D1F" text-anchor="middle">T</text>
+  <circle cx="422" cy="447" r="8" fill="#FF4D1F" opacity="0.55"/>
 </svg>

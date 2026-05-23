@@ -869,6 +869,57 @@
     font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
     text-transform: uppercase; color: var(--ink-dim); white-space: nowrap;
   }
+  .audio-ambient.listening { border-color: var(--accent); }
+  .audio-ambient.listening .audio-ambient-bars span { background: var(--accent); }
+  .audio-ambient.listening .audio-ambient-label { color: var(--accent); }
+
+  /* ============ VOICE INTERRUPT CARD ============ */
+  .voice-interrupt-card {
+    position: fixed; bottom: calc(72px + var(--safe-bottom, 0px)); right: 20px;
+    z-index: 160; width: 308px; max-width: calc(100vw - 40px);
+    background: var(--bg-elev); border: 1px solid var(--rule-strong);
+    border-radius: 20px; padding: 18px 20px;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(16px) scale(0.97); opacity: 0; pointer-events: none;
+    transition: transform 0.38s cubic-bezier(0.16,1,0.3,1), opacity 0.22s ease;
+  }
+  .voice-interrupt-card.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+  .vic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .vic-label {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent);
+  }
+  .vic-close {
+    background: none; border: none; cursor: pointer; color: var(--ink-mute);
+    font-size: 16px; padding: 0; line-height: 1; transition: color 0.2s;
+  }
+  .vic-close:hover { color: var(--ink); }
+  .vic-question {
+    font-family: var(--font-display); font-style: italic; font-size: 13.5px;
+    color: var(--ink-dim); margin-bottom: 10px; line-height: 1.45;
+  }
+  .vic-response {
+    font-size: 14px; line-height: 1.6; color: var(--ink); margin-bottom: 14px;
+  }
+  .vic-response a { color: var(--primary); text-decoration: none; }
+  .vic-response a:hover { text-decoration: underline; }
+  .vic-actions { display: flex; gap: 8px; }
+  .vic-continue {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 99px; padding: 8px 16px; cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .vic-continue:hover { background: var(--primary-deep); transform: scale(1.03); }
+  .vic-dismiss {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--bg-deep); color: var(--ink-dim); border: none;
+    border-radius: 99px; padding: 8px 14px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .vic-dismiss:hover { background: var(--rule); }
 
   /* ============ CAREER ARC SCRUBBER ============ */
   .career-arc {
@@ -2229,65 +2280,149 @@
 
   /* ============ CHAT ============ */
   const KB = [
-    { keywords: ['who','about','tell me about you','yourself','background','bio','introduce'],
-      response: "I'm Anchit — AGM, Product Management at Vahdam India, and ex–Times Internet. Six-plus years building consumer tech across D2C, subscriptions, content, and events. Started as a backend engineer before moving to product in 2022. Where to next — my <a data-nav='work'>work</a>, my <a data-nav='builds'>side builds</a>, or something specific?",
-      nextChips: ["Show me your biggest win","Tell me about your side builds","Why did you switch to product?","What are you building now?"] },
-    { keywords: ['role','title','current','doing now','what do you do','job'],
-      response: "Right now I'm AGM – Product Management at Vahdam India (joined April 2026). Spearheading D2C growth across the US, UK, and global markets — product performance, CRM experimentation via Klaviyo and WebEngage, customer experience, and revenue optimisation. Before this I was Senior PM at Times Internet for a year, owning the Half Marathon launch and the Assisted Sales scale-up.",
-      nextChips: ["Tell me about the marathon","What's the AI telesuite?","Show me your work history","How do I reach you?"] },
-    { keywords: ['et markets','markets','revamp','finance','stocks'],
-      response: "I led the end-to-end revamp of ET Markets across Web, mWeb, Android, and iOS — one of India's highest-traffic consumer financial surfaces. Drove +27% engagement, +25% DAU, +15% session duration, and unlocked ₹3 Cr+ in incremental annual revenue. <a data-nav='work'>See the full work view →</a>",
-      nextChips: ["What about ET Prime?","Tell me about Times Health+","What's your engineering background?","Show me a side build"] },
-    { keywords: ['prime','assisted sales','sales','subscription','conversion','funnel','roi','growth','biggest','win'],
-      response: "My biggest growth story: I scaled Assisted Sales for ET Prime from ₹15L to ₹80L MRR (5×) and delivered 400%+ ROI in six months. Won a Team Award in October 2025 for the Jul–Sep '25 performance. The AI telesuite I built — transcription + pitch scoring + conversion assist — made that consistency possible at scale.",
-      nextChips: ["What's the AI telesuite?","Show me ET Markets work","Tell me about Times Health+","Show me your side builds"] },
-    { keywords: ['marathon','event','running','half','0 to 1','zero to one','zero-to-one','building now','next'],
-      response: "At Vahdam India I'm focused on D2C growth across the US, UK, and global markets. The headline experiment: lifting product ratings from 2.4 to 4.0 through cross-functional product and CRM experiments, while growing daily lifecycle marketing revenue via Klaviyo and WebEngage. Previously at Times Internet I built the Half Marathon from scratch — zero-to-one consumer IP, which remains my favourite kind of problem.",
-      nextChips: ["Show me your other work","How do I reach you?","Tell me about your side builds","Your engineering background?"] },
-    { keywords: ['health','wellness','plus'],
-      response: "I launched Times Health+ paid wellness subscriptions from scratch — freemium-to-paid journeys, pricing experiments, retention-led monetization. A category most Indian publishers haven't cracked yet, which is exactly why it's interesting.",
-      nextChips: ["Show me TH+ LifeEngine (side build)","What about ET Markets?","Tell me about ET Prime","How do I reach you?"] },
-    { keywords: ['side','project','projects','github','build','builds','vercel','personal'],
-      response: "I've shipped four side projects, all live. Each one built end-to-end on weekends and evenings — most are AI-first consumer experiments. <a data-nav='builds'>Open the Builds view →</a> Or ask me about a specific one.",
-      nextChips: ["Tell me about Hey Yaara","Tell me about MusicGenAI","Tell me about AI TeleSuite","Tell me about TH+ LifeEngine"] },
-    { keywords: ['hey yaara','yaara','elderly','voice','companion'],
-      response: "Hey Yaara is an AI voice companion I built for the elderly — warm, conversational, designed for people who find apps intimidating. PWA so it works anywhere. <a data-nav='project-yaara'>Open the full Hey Yaara page →</a> Or go straight to the <a href='https://hey-yaara.vercel.app/' target='_blank'>live app ↗</a>.",
-      nextChips: ["Open the Hey Yaara page","Tell me about MusicGenAI","Why do you build side projects?","Show me your day job"] },
-    { keywords: ['music','musicgen','song','audio'],
-      response: "MusicGenAI is an AI music generation app I built — prompt to full track with vocal synthesis and lyric verification. Vite/React/TypeScript + Supabase + a Python microservice handling vocals. <a data-nav='project-music'>Open the full MusicGenAI page →</a> Or go straight to the <a href='https://music-gen-ai-blue.vercel.app/' target='_blank'>live app ↗</a>.",
-      nextChips: ["Open the MusicGenAI page","Tell me about AI TeleSuite","What's your tech stack?","Show me your day job"] },
-    { keywords: ['telesuite','ai tele'],
-      response: "AI TeleSuite is the consumer prototype of the same telesuite I shipped at ET — real-time transcription, pitch scoring, and conversion assist, packaged for solo operators and small teams. <a data-nav='project-telesuite'>Open the full AI TeleSuite page →</a> Or go straight to the <a href='https://ai-tele-suite.vercel.app/' target='_blank'>live app ↗</a>.",
-      nextChips: ["Open the TeleSuite page","Tell me about ET Prime","Tell me about TH+ LifeEngine","How do I reach you?"] },
-    { keywords: ['lifeengine','life engine','th+','th plus'],
-      response: "TH+ LifeEngine is my experiment in what an AI wellness engine could look like — turning generic advice into a daily plan tied to your goals. Login-gated, deliberately private. <a data-nav='project-lifeengine'>Open the full LifeEngine page →</a>",
-      nextChips: ["Open the LifeEngine page","Tell me about Times Health+","Tell me about your other builds","How do I reach you?"] },
-    { keywords: ['skill','skills','good at','specialty','specialties','expertise','strength'],
-      response: "Sharpest edges: growth funnels and conversion, 0→1 product development, subscriptions and monetization, experimentation and A/B testing, AI workflows. I think in funnels and ship in experiments.",
-      nextChips: ["Show me a 0→1 example","Show me a growth example","Tell me about your AI work","How do I reach you?"] },
-    { keywords: ['engineer','engineering','tech','code','backend','coding','developer','engineering background','why product','switch','move to product','experience'],
-      response: "B.Tech CSE from VIT Vellore (2016–2020). Started as a software engineer at Tuple Technologies (2020–22) and Citymall (2022) — backend services for consumer apps, including a live sports commentary product where I was also Product Owner. Moved to product full-time at Times Internet in 2022. Still code on weekends — the side projects are all me, end-to-end.",
-      nextChips: ["Why did you switch to product?","Show me a side build","Tell me about your day job","What's your tech stack?"] },
-    { keywords: ['why','pm','product manage','funnel reason'],
-      response: "Moved from engineering to product because I fell for <em>the funnel</em> — the unfiltered way it tells you the truth about your decisions. Shipping a feature is satisfying; watching conversion change because of it is addictive.",
-      nextChips: ["Show me your biggest funnel win","What are you building now?","Tell me about your side builds","How do I reach you?"] },
-    { keywords: ['contact','email','reach','hire','talk','connect','in touch'],
-      response: "Easiest is <a data-nav='contact'>my contact panel</a>, or just email me at <a href='mailto:anchit.tandon@gmail.com'>anchit.tandon@gmail.com</a>. LinkedIn DM works too. Phone if it's urgent: +91 98739 45238.",
-      nextChips: ["Open the contact panel","Show me your work","Show me your side builds","Are you open to remote?"] },
-    { keywords: ['linkedin','resume','cv','résumé'],
-      response: "Full résumé and work history on <a href='https://linkedin.com/in/anchit-tandon' target='_blank'>LinkedIn ↗</a>. Code on <a href='https://github.com/anchittandon-create' target='_blank'>GitHub ↗</a>. Want to see my work right here? <a data-nav='work'>Open the Work view →</a>",
-      nextChips: ["Open the Work view","Show me your side builds","Tell me about your experience","How do I reach you?"] },
-    { keywords: ['location','where','based','delhi','india','remote'],
-      response: "Based in Delhi, India (IST). Open to remote or hybrid for the right role.",
-      nextChips: ["How do I reach you?","Show me your work","What are you building now?","Show me your side builds"] },
-    { keywords: ['ai','llm','tool','chatgpt','tech stack','stack'],
-      response: "AI shows up in pretty much everything I do now. At Vahdam India I'm running CRM and product experiments at scale. At Times Internet I built the AI telesuite (transcription, pitch scoring, conversion assist). On the side: <a href='https://hey-yaara.vercel.app/' target='_blank'>Hey Yaara</a>, <a href='https://music-gen-ai-blue.vercel.app/' target='_blank'>MusicGenAI</a>, <a href='https://ai-tele-suite.vercel.app/' target='_blank'>AI TeleSuite</a>, and <a href='https://th-life-engine.vercel.app/' target='_blank'>TH+ LifeEngine</a>. <a data-nav='builds'>Open the Builds view →</a>",
-      nextChips: ["Open the Builds view","Tell me about MusicGenAI","Tell me about Hey Yaara","Tell me about your day job"] },
-    { keywords: ['hi','hello','hey','sup','yo','namaste'],
-      response: "Hey! What do you want to know — my <a data-nav='work'>work</a>, my <a data-nav='builds'>side builds</a>, or something else?",
+    /* ---- GREETINGS ---- */
+    { keywords: ['hi','hello','hey','sup','yo','namaste','good morning','good evening','howdy'],
+      response: "Hey — glad you're here. I'm Anchit: AGM Product at Vahdam India, ex-Times Internet, and a builder on weekends. What would you like to explore — my <a data-nav='work'>work</a>, my <a data-nav='builds'>side builds</a>, or something more specific?",
       nextChips: ["What do you do?","Show me your biggest win","Tell me about your side builds","How do I reach you?"] },
-    { keywords: ['thanks','thank you','thx','cool','nice','great'],
-      response: "Anytime. Anything else you want to dig into?",
+
+    /* ---- WHO I AM ---- */
+    { keywords: ['who are you','about you','tell me about yourself','yourself','background','bio','introduce','new here','first time','overview'],
+      response: "I'm Anchit Tandon — AGM, Product Management at Vahdam India, and ex–Times Internet where I spent nearly four years going from APM to Senior PM. Six-plus years of building consumer tech: D2C, subscriptions, fintech, health, and AI-first side projects. I started as a backend engineer which means I think in systems, spec in detail, and ship fast. <a data-nav='about'>My full story →</a>",
+      nextChips: ["Show me your biggest win","Tell me about your side builds","Why did you switch to product?","What are you building now?"] },
+
+    /* ---- CURRENT ROLE ---- */
+    { keywords: ['current role','current job','doing now','what do you do','job','title','vahdam','d2c','klaviyo','webengage','joined','april 2026'],
+      response: "Right now I'm AGM – Product Management at Vahdam India (joined April 2026). I'm spearheading D2C growth across the US, UK, and global markets — product experiments, CRM automation via Klaviyo and WebEngage, customer experience, and revenue optimisation. The headline so far: product ratings from 2.4 to 4.0 through cross-functional experimentation. <a data-nav='work'>See the work →</a>",
+      nextChips: ["How did you lift the ratings?","What's your CRM approach?","Show me your Times Internet wins","How do I reach you?"] },
+
+    /* ---- HIRING / AVAILABILITY ---- */
+    { keywords: ['hiring','hire','available','open to work','looking for','opportunity','open to','consider','interview','new role','open role','recruit','candidate','shortlist','screened','application'],
+      response: "Yes — open to the right conversation. I'm looking for roles where growth, experimentation, and real ownership overlap: D2C, consumer tech, subscriptions, AI-native products. I thrive where the business metric and the product decision are the same sentence. <a data-nav='contact'>Let's talk →</a>",
+      nextChips: ["What kind of role fits you?","What do you want to build next?","Tell me about your work","How do I reach you?"] },
+
+    /* ---- PM PHILOSOPHY ---- */
+    { keywords: ['philosophy','approach','framework','how do you think','methodology','process','how you work','working style','prioritise','prioritize','decision','trade-off','tradeoff','product thinking','pm approach'],
+      response: "I think in funnels and ship in experiments. Every product decision is a hypothesis about behaviour — the fastest way to know if you're right is to run it. I prioritise around one headline metric per product: the number that, if it moves, proves you shipped the right thing. Engineering background means I stay close to the spec and keep iteration loops tight.",
+      nextChips: ["Show me your biggest funnel win","How do you handle engineering disagreements?","Tell me about a hard product call","What's your north star metric approach?"] },
+
+    /* ---- METRICS / IMPACT ---- */
+    { keywords: ['north star','metrics','measure','kpi','how do you measure','analytics','data driven','numbers','arpu','retention','churn','dau','mau','impact','results','outcome','attribution'],
+      response: "Every product I own has one headline number I'm accountable for. For Assisted Sales: MRR (₹15L → ₹80L). For ET Markets: DAU (+25%). For Vahdam India: daily revenue and product rating. I always ask — what single number, if improved, proves we shipped the right thing? Then I reverse-engineer the lever tree from there.",
+      nextChips: ["Tell me the 5× MRR story","How did you lift ET Markets DAU?","Show me all your wins","What's your experimentation approach?"] },
+
+    /* ---- GROWTH / BIGGEST WIN ---- */
+    { keywords: ['prime','assisted sales','5x','biggest win','biggest achievement','best work','proud of','growth story','conversion','funnel','roi','subscription','₹80','mrr','400'],
+      response: "My standout growth story: scaled Assisted Sales for ET Prime from ₹15L to ₹80L MRR (5×) with 400%+ ROI in six months. Won a Times Internet Team Award in Oct 2025 for Jul–Sep performance. The engine behind it was an AI telesuite I built — real-time transcription, pitch scoring, and conversion assist — that made consistency possible at scale.",
+      nextChips: ["What's the AI telesuite?","Show me ET Markets work","Tell me about Times Health+","Show me my side builds"] },
+
+    /* ---- ET MARKETS ---- */
+    { keywords: ['et markets','economic times markets','markets revamp','finance product','stocks product','₹3 cr','₹3cr','27%','25% dau'],
+      response: "I led the end-to-end revamp of ET Markets across Web, mWeb, Android, and iOS — one of India's highest-traffic consumer finance surfaces. Outcome: +27% engagement, +25% DAU, +15% sessions, ₹3 Cr+ incremental annual revenue. The unlock was better discovery, sharper screeners, and portfolio tools that actually reflected how retail investors think. <a data-nav='work'>See the full work view →</a>",
+      nextChips: ["What about ET Prime?","Tell me about Times Health+","What's your engineering background?","Show me a side build"] },
+
+    /* ---- HALF MARATHON / ZERO TO ONE ---- */
+    { keywords: ['marathon','half marathon','event','running','0 to 1','zero to one','zero-to-one','consumer ip','from scratch'],
+      response: "At Times Internet I built the Half Marathon from zero — zero budget approved, zero precedent, zero template. Discovery, registration funnels, acquisition, on-ground runner insights, brand surface. It was Times Internet's first marquee consumer running event. That zero-to-one problem — no playbook, just judgment and shipping — is my favourite kind.",
+      nextChips: ["What else have you built from scratch?","Tell me about your side builds","Show me your other wins","How do I reach you?"] },
+
+    /* ---- VAHDAM RATINGS ---- */
+    { keywords: ['rating','ratings','review','2.4','4.0','product quality','customer satisfaction','lift','improve product'],
+      response: "The ratings move at Vahdam (2.4 → 4.0) wasn't a marketing fix — it was a systematic product-ops-CX alignment exercise. We mapped friction across discovery, post-purchase communication, and fulfilment visibility, then ran structured experiments across each lane. About 60 days of focused multi-team effort with one shared metric. That kind of cross-functional ownership is where I'm most useful.",
+      nextChips: ["What tools did you use?","Tell me about your CRM work","Show me other wins","How do I reach you?"] },
+
+    /* ---- TIMES HEALTH+ ---- */
+    { keywords: ['health','wellness','health+','times health','freemium','paywall','monetise','monetize'],
+      response: "I launched Times Health+ paid wellness subscriptions from zero — freemium-to-paid journeys, pricing experiments, retention-led monetisation. Most Indian publishers haven't cracked paid wellness yet, which made it genuinely interesting to design. The subscription logic I built there directly informed how I think about CRM experimentation at Vahdam.",
+      nextChips: ["Show me TH+ LifeEngine (side build)","What about ET Markets?","Tell me about ET Prime","How do I reach you?"] },
+
+    /* ---- SIDE BUILDS / PROJECTS ---- */
+    { keywords: ['side project','side build','weekend project','passion project','own things','builds','github project','personal project','what have you built','four projects','4 projects'],
+      response: "Four side projects, all live. Each built end-to-end on evenings and weekends — no team, no brief, no budget. All AI-first consumer experiments. The pattern: I pick a real problem, build an MVP that actually works, and ship it. <a data-nav='builds'>Open the Builds view →</a> — or ask me about a specific one.",
+      nextChips: ["Tell me about Hey Yaara","Tell me about MusicGenAI","Tell me about AI TeleSuite","Tell me about TH+ LifeEngine"] },
+
+    /* ---- HEY YAARA ---- */
+    { keywords: ['hey yaara','yaara','elderly','senior','voice companion','lonely','loneliness','grandparent'],
+      response: "Hey Yaara is an AI voice companion for the elderly — warm, conversational, built for people who find apps intimidating. One button, no menus, no notifications. Open it, speak, you're heard. It runs as a PWA — no app store needed. <a data-nav='project-yaara'>Full story →</a> or go straight to the <a href='https://hey-yaara.vercel.app/' target='_blank'>live app ↗</a>.",
+      nextChips: ["Why did you build it for elderly?","Tell me about MusicGenAI","Why do you build side projects?","Show me your day job"] },
+
+    /* ---- MUSICGENAI ---- */
+    { keywords: ['musicgenai','music gen','music generation','song','generate music','music ai','audio generation','lyrics'],
+      response: "MusicGenAI: prompt to full track with vocal synthesis and lyric verification — built on Vite/React/TypeScript + Supabase + a Python microservice for vocals. I built it to see how far I could push generative audio without a specialised ML background. Turns out: pretty far. <a data-nav='project-music'>Full story →</a> or <a href='https://music-gen-ai-blue.vercel.app/' target='_blank'>live app ↗</a>.",
+      nextChips: ["Open the MusicGenAI page","Tell me about AI TeleSuite","What's your tech stack?","Show me your day job"] },
+
+    /* ---- AI TELESUITE ---- */
+    { keywords: ['telesuite','ai tele','transcription','pitch scoring','sales ai','conversion assist','call scoring'],
+      response: "AI TeleSuite is the consumer version of the telesuite I shipped at ET — real-time transcription, pitch scoring, and conversion assist for solo operators. I built it because most sales tools either score calls after the fact or are priced for enterprise. This is real-time and accessible. <a data-nav='project-telesuite'>Full story →</a> or <a href='https://ai-tele-suite.vercel.app/' target='_blank'>live app ↗</a>.",
+      nextChips: ["Open the TeleSuite page","Tell me about ET Prime","Tell me about TH+ LifeEngine","How do I reach you?"] },
+
+    /* ---- LIFEENGINE ---- */
+    { keywords: ['lifeengine','life engine','th+ life','wellness planner','personalised wellness','health planner','ai wellness'],
+      response: "TH+ LifeEngine is an AI wellness planner — you tell it your goals (fitness, sleep, nutrition, focus), it builds a daily plan and adjusts as you log. It's login-gated because personalisation needs personal data. My experiment in what a 'Times Health+ engine' could actually look like. <a data-nav='project-lifeengine'>Full story →</a>",
+      nextChips: ["Open the LifeEngine page","Tell me about Times Health+","Tell me about your other builds","How do I reach you?"] },
+
+    /* ---- WORKING WITH TEAMS ---- */
+    { keywords: ['engineers','engineering team','designers','cross-functional','collaborate','work with team','stakeholder','conflict','disagreement','pushback','manage up','team dynamics','how do you lead'],
+      response: "Two years as an engineer before moving to PM means I speak both languages. With engineers: I spec to implementation detail, flag what's genuinely hard vs. what looks hard, and protect the team from scope creep. With design: I frame problems in user behaviour and business outcome, not pixels. I've rarely had to 'manage up' because the team knows the why before the what.",
+      nextChips: ["Tell me about your engineering background","What's your spec process?","Show me your PM experience","Why did you switch to product?"] },
+
+    /* ---- FAILURE / LESSONS ---- */
+    { keywords: ['fail','failure','mistake','wrong','regret','what went wrong','challenge','hard','difficult','struggle','biggest challenge','what would you change','lesson'],
+      response: "In my APM year I over-indexed on features and under-indexed on activation. Shipped a beautiful discovery flow for ET Markets — and watched DAU not move because new users couldn't get past their first session. That taught me to treat activation as the product, not the afterthought. Every product I've shipped since has an explicit onboarding hypothesis built in.",
+      nextChips: ["How did you fix it?","Tell me about ET Markets","What's your onboarding approach?","Show me your work"] },
+
+    /* ---- FUTURE / AMBITIONS ---- */
+    { keywords: ['future','next role','ideal role','dream job','five years','where do you see yourself','goals','aspiration','vision','ambition','what do you want','long term'],
+      response: "I want to own P&L for a D2C or consumer product where distribution is the moat — somewhere growth, pricing, and retention intersect. Longer-term: building something of my own. The side projects aren't hobbies; they're compounding pattern recognition. Four AI products built end-to-end in evenings — I know what makes a product real now.",
+      nextChips: ["Tell me about your side builds","What would you build next?","Tell me about Vahdam India","How do I reach you?"] },
+
+    /* ---- SKILLS ---- */
+    { keywords: ['skill','skills','good at','specialty','expertise','strength','best at','what do you know','capabilities','core competency'],
+      response: "Sharpest edges: growth funnels and conversion, 0→1 product development, subscriptions and monetisation, A/B experimentation, AI workflows. I think in systems (engineering background) and ship in experiments (PM practice). The combination means I can move fast without breaking things — and I know which is which. <a data-nav='about'>Full skills view →</a>",
+      nextChips: ["Show me a 0→1 example","Show me a growth example","Tell me about your AI work","How do I reach you?"] },
+
+    /* ---- ENGINEERING BACKGROUND ---- */
+    { keywords: ['engineer','backend','coding','developer','engineering background','tech background','how did you start','vit','computer science','code','technical','b.tech'],
+      response: "B.Tech CSE from VIT Vellore (2016–2020). Started as a backend engineer — consumer apps, live sports commentary, data pipelines. Moved to product at Times Internet in 2022. I still write code every weekend — all four side projects are mine, end-to-end, no team. The engineering brain is a PM superpower: I can spec precisely, read pull requests, and spot what's actually hard before estimation goes sideways.",
+      nextChips: ["Why did you switch to product?","Show me a side build","Tell me about your day job","What's your tech stack?"] },
+
+    /* ---- WHY PRODUCT ---- */
+    { keywords: ['why product','why pm','move to product','switch to product','why did you leave engineering','engineering to product','career change','pivot'],
+      response: "I fell for <em>the funnel</em>. When I was a product owner on a live sports app, I saw how a single UX decision changed conversion in real time. Engineering tells you what you built; the funnel tells you if it mattered. That distinction made me want to sit on the product side permanently.",
+      nextChips: ["Show me your biggest funnel win","What are you building now?","Tell me about your side builds","How do I reach you?"] },
+
+    /* ---- AI / TECH STACK ---- */
+    { keywords: ['ai','llm','artificial intelligence','gpt','claude','gemini','tech stack','react','typescript','python','supabase','stack','tools you use'],
+      response: "AI is the thread running through everything I do now. At Vahdam: CRM and product experiments at scale. At Times Internet: built the AI telesuite (transcription, pitch scoring, conversion assist). Side projects: Hey Yaara (LLM voice), MusicGenAI (generative audio), AI TeleSuite (real-time scoring), TH+ LifeEngine (AI wellness). Stack: React/TypeScript, Python, Supabase, GCP. <a data-nav='builds'>See the builds →</a>",
+      nextChips: ["Open the Builds view","Tell me about MusicGenAI","Tell me about Hey Yaara","Tell me about your day job"] },
+
+    /* ---- CONTACT ---- */
+    { keywords: ['contact','email','reach out','get in touch','talk','connect','how to reach','phone','message','dm'],
+      response: "Best way: email at <a href='mailto:anchit.tandon@gmail.com'>anchit.tandon@gmail.com</a>, or <a data-nav='contact'>open the contact panel</a> for all the options. LinkedIn DM works too. If it's urgent: +91 98739 45238.",
+      nextChips: ["Open the contact panel","Show me your work","Show me your side builds","Are you open to remote?"] },
+
+    /* ---- LINKEDIN / RESUME ---- */
+    { keywords: ['linkedin','resume','cv','résumé','portfolio','full profile'],
+      response: "Full résumé and work history on <a href='https://linkedin.com/in/anchit-tandon' target='_blank'>LinkedIn ↗</a>. All code on <a href='https://github.com/anchittandon-create' target='_blank'>GitHub ↗</a>. Or stay right here — <a data-nav='work'>the Work view</a> covers everything with numbers.",
+      nextChips: ["Open the Work view","Show me your side builds","Tell me about your experience","How do I reach you?"] },
+
+    /* ---- LOCATION ---- */
+    { keywords: ['location','where are you','based','delhi','india','remote','hybrid','timezone','ist','relocate'],
+      response: "Based in Delhi, India (IST, UTC+5:30). Open to remote or hybrid for the right role — I've been collaborating asynchronously with global markets at Vahdam India since day one.",
+      nextChips: ["How do I reach you?","Show me your work","What are you building now?","Show me your side builds"] },
+
+    /* ---- ELABORATION / POSITIVE RESPONSE ---- */
+    { keywords: ['tell me more','more details','elaborate','go on','interesting','impressive','wow','amazing','great work','love that','tell me everything','what else'],
+      response: "Happy to go deeper — what's caught your attention? The funnel work, the side builds, how I think about product decisions, or the engineering-to-PM pivot? Each has its own texture.",
+      nextChips: ["Tell me about your funnel work","Tell me about your side builds","Your PM approach?","Why did you switch from engineering?"] },
+
+    /* ---- SALARY / COMP ---- */
+    { keywords: ['salary','compensation','ctc','pay','package','money','how much'],
+      response: "Happy to discuss compensation — let's do that properly over email or a call. <a href='mailto:anchit.tandon@gmail.com'>anchit.tandon@gmail.com</a> or <a data-nav='contact'>contact panel →</a>",
+      nextChips: ["Open the contact panel","Tell me about your work","Show me your experience","How do I reach you?"] },
+
+    /* ---- THANKS ---- */
+    { keywords: ['thanks','thank you','thx','appreciate','helpful','that helps'],
+      response: "Of course — glad that was useful. What else would you like to know?",
       nextChips: ["Tell me about your side builds","Show me your work","What are you building now?","How do I reach you?"] }
   ];
 
@@ -2346,10 +2481,10 @@
     let best = null, bestScore = 0;
     for (const e of KB) {
       let s = 0;
-      for (const kw of e.keywords) { if (q.includes(kw)) s += kw.length; }
+      for (const kw of e.keywords) { if (q.includes(kw)) s += kw.length + (kw.includes(' ') ? kw.length : 0); }
       if (s > bestScore) { bestScore = s; best = e; }
     }
-    return best;
+    return bestScore >= 3 ? best : null;
   }
   function handleMessage(text) {
     if (!text.trim()) return;
@@ -2358,9 +2493,18 @@
     setTimeout(() => {
       hideTyping();
       const m = findMatch(text);
-      if (m) { addBot(m.response); renderChips(m.nextChips || DEFAULT_CHIPS); }
-      else { addBot("I don't have a great answer to that one — yet. Try asking about my current role at Vahdam India, my work at Times Internet, my side builds (Hey Yaara, MusicGenAI, etc), my engineering background, or how to reach me. Or just email me directly at <a href='mailto:anchit.tandon@gmail.com'>anchit.tandon@gmail.com</a>."); renderChips(DEFAULT_CHIPS); }
-    }, 500 + Math.random() * 400);
+      if (m) {
+        addBot(m.response); renderChips(m.nextChips || DEFAULT_CHIPS);
+      } else {
+        const fallbacks = [
+          "That's a good one — I don't have a scripted answer, but I'd love to talk it through. <a href='mailto:anchit.tandon@gmail.com'>Email me directly →</a> or try asking about my work, my side builds, or my background.",
+          "Hmm, I'm not sure I have the right answer cached for that. Try rephrasing, or just <a data-nav='contact'>reach out directly</a> — I'm much better in conversation.",
+          "I might be reading this wrong. Try asking about a specific project, role, or skill — or just <a href='mailto:anchit.tandon@gmail.com'>email me</a> and I'll answer anything."
+        ];
+        addBot(fallbacks[Math.floor(Math.random() * fallbacks.length)]);
+        renderChips(DEFAULT_CHIPS);
+      }
+    }, 400 + Math.random() * 300);
   }
 
   chatSend.addEventListener('click', () => {
@@ -2372,7 +2516,7 @@
 
   // Initial bot message
   setTimeout(() => {
-    addBot("That's the snapshot. Ask me for the texture — the <a data-nav='work'>work</a>, the <a data-nav='builds'>side builds</a>, the funnel decisions, or what I'm figuring out next.");
+    addBot("Hey — I'm Anchit. Ask me about my <a data-nav='work'>work</a>, my <a data-nav='builds'>side builds</a>, how I think about product, or anything else. I'll do my best to give you an honest answer.");
     renderChips(DEFAULT_CHIPS);
   }, 350);
 
@@ -2523,39 +2667,155 @@
     }
   })();
 
-  /* ============ AMBIENT VOICE — plays once after first user gesture ============ */
+  /* ============ AMBIENT VOICE + INTERRUPT LISTENER ============ */
   (function() {
     const audio = document.getElementById('audio-anchit');
     const indicator = document.getElementById('audioAmbient');
     if (!audio || !indicator) return;
 
     let played = false;
+    let pausedForInterrupt = false;
 
     function show() { indicator.classList.add('active'); }
-    function hide() { indicator.classList.remove('active'); }
-
-    audio.addEventListener('ended', hide);
-    audio.addEventListener('pause', hide);
-    audio.addEventListener('error', hide);
-
-    // CRITICAL: play() must be called synchronously inside the gesture handler.
-    // Any setTimeout() breaks the browser's user-activation window and blocks audio.
-    function onFirstGesture(e) {
-      if (played) return;
-      // Only fire on real interactive elements, not passive scroll events
-      if (e.type === 'keydown' && e.key === 'Tab') return;
-      played = true;
-      document.removeEventListener('click',    onFirstGesture);
-      document.removeEventListener('keydown',  onFirstGesture);
-      document.removeEventListener('pointerup', onFirstGesture);
-      audio.play().then(show).catch(err => {
-        played = false; // allow retry on next gesture if blocked
-      });
+    function hide() { if (!pausedForInterrupt) indicator.classList.remove('active'); }
+    function setListening(on) {
+      indicator.classList.toggle('listening', on);
+      indicator.querySelector('.audio-ambient-label').textContent = on ? 'Listening…' : 'Playing';
     }
 
+    audio.addEventListener('ended', () => { pausedForInterrupt = false; indicator.classList.remove('active','listening'); });
+    audio.addEventListener('pause', hide);
+    audio.addEventListener('error', () => { pausedForInterrupt = false; indicator.classList.remove('active','listening'); });
+
+    // CRITICAL: play() must be called synchronously inside the gesture handler.
+    function onFirstGesture(e) {
+      if (played) return;
+      if (e.type === 'keydown' && e.key === 'Tab') return;
+      played = true;
+      document.removeEventListener('click',     onFirstGesture);
+      document.removeEventListener('keydown',   onFirstGesture);
+      document.removeEventListener('pointerup', onFirstGesture);
+      audio.play().then(show).catch(() => { played = false; });
+    }
     document.addEventListener('click',     onFirstGesture, { passive: true });
     document.addEventListener('keydown',   onFirstGesture, { passive: true });
     document.addEventListener('pointerup', onFirstGesture, { passive: true });
+
+    /* ---- Voice interrupt via SpeechRecognition ---- */
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return; // graceful degradation — no interrupt on unsupported browsers
+
+    // Build the interrupt card
+    const card = document.createElement('div');
+    card.className = 'voice-interrupt-card';
+    card.innerHTML =
+      '<div class="vic-header">' +
+        '<span class="vic-label">&#9679; You asked</span>' +
+        '<button class="vic-close" aria-label="Dismiss">&#x2715;</button>' +
+      '</div>' +
+      '<div class="vic-question"></div>' +
+      '<div class="vic-response"></div>' +
+      '<div class="vic-actions">' +
+        '<button class="vic-continue">Continue narration &#9654;</button>' +
+        '<button class="vic-dismiss">Skip, thanks</button>' +
+      '</div>';
+    document.body.appendChild(card);
+
+    function showCard(question, responseHtml) {
+      card.querySelector('.vic-question').textContent = '“' + question + '”';
+      card.querySelector('.vic-response').innerHTML = responseHtml;
+      card.querySelectorAll('[data-nav]').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          card.classList.remove('active');
+          switchView(a.dataset.nav);
+        });
+      });
+      card.classList.add('active');
+    }
+
+    function dismissCard() {
+      card.classList.remove('active');
+      pausedForInterrupt = false;
+    }
+
+    card.querySelector('.vic-close').addEventListener('click', dismissCard);
+    card.querySelector('.vic-dismiss').addEventListener('click', dismissCard);
+    card.querySelector('.vic-continue').addEventListener('click', () => {
+      dismissCard();
+      // Resume politely only if audio hasn't ended
+      if (!audio.ended) {
+        audio.play().then(show).catch(() => {});
+      }
+    });
+
+    let rec = null;
+    let recognizing = false;
+
+    function startRec() {
+      if (recognizing || pausedForInterrupt) return;
+      try {
+        rec = new SR();
+        rec.continuous = false;
+        rec.interimResults = false;
+        rec.lang = 'en-IN';
+
+        rec.onresult = (e) => {
+          if (!e.results[0]?.isFinal) return;
+          const q = (e.results[0][0].transcript || '').trim();
+          if (!q || q.length < 3) return;
+
+          // Interrupt gracefully
+          pausedForInterrupt = true;
+          audio.pause();
+          setListening(false);
+          indicator.classList.remove('active');
+
+          const match = findMatch(q);
+          const resp = match
+            ? match.response
+            : 'That\'s a thoughtful question — I\'d love to give it the space it deserves. <a data-nav="home">Ask me in the chat</a> and I\'ll walk you through it properly.';
+          showCard(q, resp);
+        };
+
+        rec.onend = () => {
+          recognizing = false;
+          setListening(false);
+          // Restart if audio is still playing and we haven't been interrupted
+          if (!audio.paused && !audio.ended && !pausedForInterrupt) {
+            setTimeout(startRec, 300);
+          }
+        };
+
+        rec.onerror = (ev) => {
+          recognizing = false;
+          setListening(false);
+          if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
+            rec = null; // mic permission denied — stop trying
+          }
+        };
+
+        rec.start();
+        recognizing = true;
+        setListening(true);
+      } catch (err) {
+        recognizing = false;
+      }
+    }
+
+    function stopRec() {
+      recognizing = false;
+      setListening(false);
+      if (rec) { try { rec.stop(); } catch (err) {} }
+    }
+
+    audio.addEventListener('play', () => {
+      if (!pausedForInterrupt) setTimeout(startRec, 800);
+    });
+    audio.addEventListener('pause', () => {
+      if (!pausedForInterrupt) stopRec();
+    });
+    audio.addEventListener('ended', stopRec);
   })();
 
   /* ============ SCROLL PROGRESS BAR ============ */
