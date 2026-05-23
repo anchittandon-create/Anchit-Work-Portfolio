@@ -2523,39 +2523,108 @@
     }
   })();
 
-  /* ============ AMBIENT VOICE — plays once after first user gesture ============ */
+  /* ============ AMBIENT VOICE — plays page-specific audio or fallback ============ */
   (function() {
     const audio = document.getElementById('audio-anchit');
     const indicator = document.getElementById('audioAmbient');
     if (!audio || !indicator) return;
 
-    let played = false;
+    const label = indicator.querySelector('.audio-ambient-label');
+    let isInteracted = false;
+    let currentAttemptSrc = '';
 
-    function show() { indicator.classList.add('active'); }
-    function hide() { indicator.classList.remove('active'); }
+    function show(viewName) {
+      if (label) {
+        const names = { home: 'Home', work: 'Work', builds: 'Builds', about: 'About', contact: 'Contact' };
+        const key = viewName.startsWith('project-') ? 'Builds' : (names[viewName] || 'Anchit');
+        label.textContent = 'Hear Anchit · ' + key;
+      }
+      indicator.classList.add('active');
+    }
+
+    function hide() {
+      indicator.classList.remove('active');
+    }
 
     audio.addEventListener('ended', hide);
     audio.addEventListener('pause', hide);
-    audio.addEventListener('error', hide);
 
-    // CRITICAL: play() must be called synchronously inside the gesture handler.
-    // Any setTimeout() breaks the browser's user-activation window and blocks audio.
+    // Main robust view-specific playback function
+    function playAudioForView(viewName) {
+      if (!isInteracted) return;
+
+      let key = viewName;
+      if (key.startsWith('project-')) {
+        key = 'builds';
+      }
+
+      audio.pause();
+
+      const sources = [
+        `audio/${key}.m4a`,
+        `audio/${key}.mp3`,
+        `audio/anchit.m4a`
+      ];
+
+      let attemptIndex = 0;
+
+      function tryNextSource() {
+        if (attemptIndex >= sources.length) {
+          audio.onerror = null;
+          hide();
+          return;
+        }
+        const nextSrc = sources[attemptIndex++];
+        currentAttemptSrc = nextSrc;
+
+        audio.onerror = () => {
+          if (currentAttemptSrc === nextSrc) {
+            tryNextSource();
+          }
+        };
+
+        audio.src = nextSrc;
+        audio.load();
+
+        audio.play()
+          .then(() => {
+            if (currentAttemptSrc === nextSrc) {
+              show(viewName);
+            }
+          })
+          .catch(err => {
+            if (currentAttemptSrc === nextSrc) {
+              tryNextSource();
+            }
+          });
+      }
+
+      tryNextSource();
+    }
+
+    // Trigger on first interaction (ensures mobile Safari compatibility)
     function onFirstGesture(e) {
-      if (played) return;
-      // Only fire on real interactive elements, not passive scroll events
+      if (isInteracted) return;
       if (e.type === 'keydown' && e.key === 'Tab') return;
-      played = true;
-      document.removeEventListener('click',    onFirstGesture);
-      document.removeEventListener('keydown',  onFirstGesture);
+      isInteracted = true;
+
+      document.removeEventListener('click',     onFirstGesture);
+      document.removeEventListener('keydown',   onFirstGesture);
       document.removeEventListener('pointerup', onFirstGesture);
-      audio.play().then(show).catch(err => {
-        played = false; // allow retry on next gesture if blocked
-      });
+
+      const activeViewEl = document.querySelector('.view.active');
+      const activeView = activeViewEl ? activeViewEl.id.replace('view-', '') : 'home';
+      playAudioForView(activeView);
     }
 
     document.addEventListener('click',     onFirstGesture, { passive: true });
     document.addEventListener('keydown',   onFirstGesture, { passive: true });
     document.addEventListener('pointerup', onFirstGesture, { passive: true });
+
+    // Switch audio on view change
+    document.addEventListener('viewChanged', (e) => {
+      playAudioForView(e.detail);
+    });
   })();
 
   /* ============ SCROLL PROGRESS BAR ============ */
