@@ -316,12 +316,82 @@
     margin-top: 16px; line-height: 1.5; max-width: 220px;
   }
 
+  /* ============ HOME IDENTITY + CHAT GRID ============ */
+  .home-identity-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 860px) {
+    .home-identity-row { grid-template-columns: 1fr; }
+  }
+  .identity-card {
+    background: var(--bg-elev); border-radius: 28px;
+    border: 1px solid var(--rule);
+    padding: 28px 28px 24px;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .identity-prose {
+    font-family: var(--font-display); font-weight: 300;
+    font-size: clamp(15px, 1.5vw, 17px); line-height: 1.65; color: var(--ink);
+  }
+  .identity-prose p { margin: 0 0 14px; }
+  .identity-prose p:last-child { margin-bottom: 0; }
+  .identity-prose em { font-style: italic; color: var(--primary); }
+  .identity-divider {
+    height: 1px; background: var(--rule); margin: 22px 0;
+  }
+  .identity-meta {
+    display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px;
+  }
+  .identity-row {
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .identity-meta-key {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--ink-mute); min-width: 58px; flex-shrink: 0;
+  }
+  .identity-meta-val {
+    font-size: 13.5px; color: var(--ink); line-height: 1.45;
+  }
+  .identity-meta-val strong { font-weight: 600; }
+  .identity-skills {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px;
+  }
+  .skill-tag {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-dim);
+    background: var(--bg-deep); border: 1px solid var(--rule);
+    border-radius: 99px; padding: 5px 11px;
+  }
+  .identity-proof {
+    display: flex; gap: 0; border-top: 1px solid var(--rule); padding-top: 18px;
+  }
+  .identity-proof-item {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+    padding-right: 16px; border-right: 1px solid var(--rule);
+    margin-right: 16px;
+  }
+  .identity-proof-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+  .identity-proof-num {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(26px, 3vw, 36px); line-height: 1; letter-spacing: -0.03em;
+    color: var(--ink); font-variation-settings: "SOFT" 70, "WONK" 1;
+  }
+  .identity-proof-num em { font-style: italic; color: var(--primary); }
+  .identity-proof-label {
+    font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--ink-dim); line-height: 1.4;
+  }
+
   /* Currently strip */
   .hero-current-block {
     background: var(--ink); color: var(--bg);
     border-radius: 20px; padding: 28px 32px;
     display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-    margin-bottom: 64px;
+    margin-bottom: 48px;
     transition: transform 0.3s ease;
   }
   .hero-current-block:hover { transform: translateY(-2px); }
@@ -348,7 +418,6 @@
     background: var(--bg-elev); border-radius: 28px;
     box-shadow: var(--shadow-md);
     overflow: hidden;
-    margin-bottom: 32px;
   }
   .chat-head {
     padding: 28px 32px 20px; border-bottom: 1px solid var(--rule);
@@ -859,6 +928,57 @@
     font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
     text-transform: uppercase; color: var(--ink-dim); white-space: nowrap;
   }
+  .audio-ambient.listening { border-color: var(--accent); }
+  .audio-ambient.listening .audio-ambient-bars span { background: var(--accent); }
+  .audio-ambient.listening .audio-ambient-label { color: var(--accent); }
+
+  /* ============ VOICE INTERRUPT CARD ============ */
+  .voice-interrupt-card {
+    position: fixed; bottom: calc(72px + var(--safe-bottom, 0px)); right: 20px;
+    z-index: 160; width: 308px; max-width: calc(100vw - 40px);
+    background: var(--bg-elev); border: 1px solid var(--rule-strong);
+    border-radius: 20px; padding: 18px 20px;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(16px) scale(0.97); opacity: 0; pointer-events: none;
+    transition: transform 0.38s cubic-bezier(0.16,1,0.3,1), opacity 0.22s ease;
+  }
+  .voice-interrupt-card.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+  .vic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .vic-label {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent);
+  }
+  .vic-close {
+    background: none; border: none; cursor: pointer; color: var(--ink-mute);
+    font-size: 16px; padding: 0; line-height: 1; transition: color 0.2s;
+  }
+  .vic-close:hover { color: var(--ink); }
+  .vic-question {
+    font-family: var(--font-display); font-style: italic; font-size: 13.5px;
+    color: var(--ink-dim); margin-bottom: 10px; line-height: 1.45;
+  }
+  .vic-response {
+    font-size: 14px; line-height: 1.6; color: var(--ink); margin-bottom: 14px;
+  }
+  .vic-response a { color: var(--primary); text-decoration: none; }
+  .vic-response a:hover { text-decoration: underline; }
+  .vic-actions { display: flex; gap: 8px; }
+  .vic-continue {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 99px; padding: 8px 16px; cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .vic-continue:hover { background: var(--primary-deep); transform: scale(1.03); }
+  .vic-dismiss {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--bg-deep); color: var(--ink-dim); border: none;
+    border-radius: 99px; padding: 8px 14px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .vic-dismiss:hover { background: var(--rule); }
 
   /* ============ CAREER ARC SCRUBBER ============ */
   .career-arc {
@@ -1330,24 +1450,6 @@
           <span class="text">AGM — Product Management at <em>Vahdam India</em> since Apr 2026. D2C growth, CRM experimentation, conversion optimisation across US, UK &amp; global markets.</span>
           <span class="arrow">See the work →</span>
         </a>
-
-        <div class="chat-block reveal">
-          <div class="chat-head">
-            <div class="chat-head-avatar">A</div>
-            <div class="chat-head-info">
-              <div class="title">Talk with Anchit</div>
-              <div class="sub">Online now · usually replies in seconds</div>
-            </div>
-          </div>
-          <div class="chat-body" id="chatBody"></div>
-          <div class="chips" id="chipRow"></div>
-          <div class="chat-input">
-            <input type="text" id="chatInput" placeholder="Ask me anything…" autocomplete="off" />
-            <button class="chat-send" id="chatSend" aria-label="Send">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -2361,10 +2463,10 @@
     let best = null, bestScore = 0;
     for (const e of KB) {
       let s = 0;
-      for (const kw of e.keywords) { if (q.includes(kw)) s += kw.length; }
+      for (const kw of e.keywords) { if (q.includes(kw)) s += kw.length + (kw.includes(' ') ? kw.length : 0); }
       if (s > bestScore) { bestScore = s; best = e; }
     }
-    return best;
+    return bestScore >= 3 ? best : null;
   }
   function handleMessage(text) {
     if (!text.trim()) return;
@@ -2617,7 +2719,6 @@
       const activeView = activeEl ? activeEl.id.replace('view-', '') : 'home';
       trySpeak(activeView);
     }
-
     document.addEventListener('click',     onFirstGesture, { passive: true });
     document.addEventListener('keydown',   onFirstGesture, { passive: true });
     document.addEventListener('pointerup', onFirstGesture, { passive: true });
