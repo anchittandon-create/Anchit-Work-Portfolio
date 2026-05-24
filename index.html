@@ -921,109 +921,80 @@
   }
   .tilt-card:hover::after { opacity: 1; }
 
-  /* ============ VOICE — AMBIENT INDICATOR ============ */
-  .audio-ambient {
-    position: fixed; bottom: calc(20px + var(--safe-bottom)); right: 20px;
-    z-index: 150; display: none; align-items: center; gap: 8px;
-    pointer-events: none;
+  /* ============ FLOATING AUDIO WIDGET ============ */
+  .audio-float {
+    position: fixed; bottom: calc(24px + var(--safe-bottom)); right: 24px;
+    z-index: 200; font-family: var(--font-mono);
+  }
+  .af-idle {
+    display: flex;
+  }
+  .af-play-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--bg);
+    border: none; border-radius: 99px; padding: 10px 18px 10px 14px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .af-play-btn:hover { background: var(--primary); transform: scale(1.04); }
+  .af-active {
+    display: none; flex-direction: column; gap: 6px;
     background: var(--bg-elev); border: 1px solid var(--rule-strong);
-    border-radius: 99px; padding: 6px 12px 6px 10px;
-    box-shadow: var(--shadow-sm);
+    border-radius: 16px; padding: 12px 14px; width: 240px;
+    box-shadow: var(--shadow-lg);
   }
-  .audio-ambient.active { display: flex; }
-  .audio-ambient-bars {
-    display: flex; align-items: flex-end; gap: 2px; height: 14px;
-  }
-  .audio-ambient-bars span {
-    display: block; width: 2px; border-radius: 2px;
-    background: var(--primary);
+  .audio-float.playing .af-idle,
+  .audio-float.paused  .af-idle  { display: none; }
+  .audio-float.playing .af-active,
+  .audio-float.paused  .af-active { display: flex; }
+  .af-info { display: flex; align-items: center; gap: 8px; }
+  .af-waveform { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+  .af-waveform span {
+    display: block; width: 2px; border-radius: 2px; background: var(--primary);
     animation: waveBar 1.1s ease-in-out infinite;
   }
-  .audio-ambient-bars span:nth-child(1) { height: 6px;  animation-delay: 0s; }
-  .audio-ambient-bars span:nth-child(2) { height: 10px; animation-delay: 0.18s; }
-  .audio-ambient-bars span:nth-child(3) { height: 14px; animation-delay: 0.09s; }
-  .audio-ambient-bars span:nth-child(4) { height: 8px;  animation-delay: 0.27s; }
-  .audio-ambient-bars span:nth-child(5) { height: 4px;  animation-delay: 0.13s; }
-  @keyframes waveBar {
-    0%, 100% { transform: scaleY(0.45); opacity: 0.55; }
-    50%       { transform: scaleY(1);   opacity: 1; }
+  .af-waveform span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .af-waveform span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+  .af-waveform span:nth-child(3) { height: 16px; animation-delay: 0.08s; }
+  .af-waveform span:nth-child(4) { height: 10px; animation-delay: 0.22s; }
+  .af-waveform span:nth-child(5) { height: 5px; animation-delay: 0.12s; }
+  .audio-float.paused .af-waveform span { animation-play-state: paused; opacity: 0.4; }
+  .af-section-label {
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink); font-weight: 600; flex: 1;
   }
-  .audio-ambient-label {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
-    text-transform: uppercase; color: var(--ink-dim); white-space: nowrap;
+  .af-caption-row {
+    font-size: 11px; color: var(--ink-dim); line-height: 1.5;
+    min-height: 0; max-height: 44px; overflow: hidden;
+    word-wrap: break-word;
   }
-  .audio-ambient.listening { border-color: var(--accent); }
-  .audio-ambient.listening .audio-ambient-bars span { background: var(--accent); }
-  .audio-ambient.listening .audio-ambient-label { color: var(--accent); }
-
-  /* ============ AUDIO NUDGE BAR ============ */
-  .audio-nudge {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(255,77,31,0.06); border-bottom: 1px solid rgba(255,77,31,0.18);
-    padding: 0 clamp(20px,4vw,48px); overflow: hidden;
-  }
-  .audio-nudge.dismissed { display: none; }
-  .audio-nudge-idle { display: flex; align-items: center; gap: 16px; padding: 13px 0; }
-  .audio-nudge.playing .audio-nudge-idle,
-  .audio-nudge.paused  .audio-nudge-idle { display: none; }
-  .audio-nudge-icon {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--primary); color: #fff;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .audio-nudge-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
-  .audio-nudge-headline {
-    font-family: var(--font-display); font-size: 15px; font-weight: 500;
-    color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .audio-nudge-sub {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
-    text-transform: uppercase; color: var(--ink-dim); white-space: nowrap;
-  }
-  .audio-nudge-play-btn {
-    display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
-    font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; background: var(--primary); color: #fff; border: none;
-    border-radius: 99px; padding: 10px 20px; cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .audio-nudge-play-btn:hover { background: var(--primary-deep); transform: scale(1.04); }
-  .audio-nudge-dismiss-btn {
-    background: none; border: none; cursor: pointer; color: var(--ink-mute);
-    font-size: 18px; padding: 4px 8px; line-height: 1; flex-shrink: 0; transition: color 0.2s;
-  }
-  .audio-nudge-dismiss-btn:hover { color: var(--ink); }
-  @media (max-width: 600px) { .audio-nudge-sub { display: none; } }
-
-  /* Nudge — player state */
-  .audio-nudge-player { display: none; align-items: center; gap: 12px; padding: 11px 0; }
-  .audio-nudge.playing .audio-nudge-player,
-  .audio-nudge.paused  .audio-nudge-player { display: flex; }
-  .anp-btn {
-    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  .af-caption-row:empty { display: none; }
+  .af-caption-word { transition: color 0.08s, font-weight 0.08s; }
+  .af-caption-word.current { color: var(--primary); font-weight: 700; }
+  .af-controls { display: flex; align-items: center; gap: 6px; }
+  .af-btn {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
     background: var(--primary); color: #fff; border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s, transform 0.15s;
+    transition: background 0.2s;
   }
-  .anp-btn:hover { background: var(--primary-deep); transform: scale(1.08); }
-  .anp-label {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
-    text-transform: uppercase; color: var(--ink-dim); flex-shrink: 0; white-space: nowrap;
+  .af-btn:hover { background: var(--primary-deep); }
+  .af-progress-bar {
+    flex: 1; height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden;
   }
-  .audio-nudge.paused .anp-label { color: var(--ink-mute); }
-  .anp-progress {
-    flex: 1; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden;
-    cursor: pointer; min-width: 60px;
+  .af-progress-fill { height: 100%; background: var(--primary); border-radius: 2px; width: 0%; transition: width 0.5s linear; }
+  .af-time { font-size: 10px; color: var(--ink-mute); min-width: 28px; text-align: right; }
+  .af-stop-btn {
+    background: none; border: none; cursor: pointer; color: var(--ink-mute);
+    font-size: 14px; padding: 2px 4px; line-height: 1; transition: color 0.2s; flex-shrink: 0;
   }
-  .anp-progress-fill { height: 100%; background: var(--primary); border-radius: 2px; width: 0%; transition: width 0.6s linear; }
-  .anp-time { font-family: var(--font-mono); font-size: 10px; color: var(--ink-mute); flex-shrink: 0; min-width: 30px; text-align: right; }
-  .anp-stop-btn {
-    background: none; border: 1px solid var(--rule-strong); color: var(--ink-mute);
-    font-size: 10px; font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase;
-    border-radius: 99px; padding: 6px 12px; cursor: pointer; flex-shrink: 0;
-    transition: border-color 0.2s, color 0.2s;
+  .af-stop-btn:hover { color: var(--ink); }
+  @media (max-width: 600px) {
+    .audio-float { bottom: 16px; right: 16px; }
+    .af-active { width: 200px; }
   }
-  .anp-stop-btn:hover { border-color: var(--primary); color: var(--primary); }
 
   /* Chat TTS speaking state + caption */
   .msg.bot.speaking .msg-bubble { outline: 2px solid var(--primary); outline-offset: 1px; }
@@ -1456,17 +1427,25 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <span class="sidebar-tip">Home</span>
     </a>
-    <a class="sidebar-item" href="#work" data-view="work" aria-label="Work">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-      <span class="sidebar-tip">Work</span>
-    </a>
-    <a class="sidebar-item" href="#builds" data-view="builds" aria-label="Builds">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      <span class="sidebar-tip">Builds</span>
-    </a>
-    <a class="sidebar-item" href="#about" data-view="about" aria-label="About">
+    <a class="sidebar-item" href="#about" data-view="about" aria-label="About Me">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span class="sidebar-tip">About</span>
+      <span class="sidebar-tip">About Me</span>
+    </a>
+    <a class="sidebar-item" href="#now" data-view="now" aria-label="Now">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span class="sidebar-tip">Now</span>
+    </a>
+    <a class="sidebar-item" href="#experience" data-view="experience" aria-label="Experience">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span class="sidebar-tip">Experience</span>
+    </a>
+    <a class="sidebar-item" href="#projects" data-view="projects" aria-label="Projects">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      <span class="sidebar-tip">Projects</span>
+    </a>
+    <a class="sidebar-item" href="#resume" data-view="resume" aria-label="Resume">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span class="sidebar-tip">Resume</span>
     </a>
     <a class="sidebar-item" href="#contact" data-view="contact" aria-label="Contact">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -1507,38 +1486,6 @@
 
 <!-- ============ MAIN ============ -->
 <main>
-
-  <!-- ============ AUDIO NUDGE BAR — visible on every view ============ -->
-  <div class="audio-nudge" id="audioNudge" role="region" aria-label="Voice narration by Anchit">
-    <!-- Idle: invite to play -->
-    <div class="audio-nudge-idle">
-      <div class="audio-nudge-icon" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="8" y1="6" x2="8" y2="18"/><line x1="4" y1="10" x2="4" y2="14"/><line x1="16" y1="6" x2="16" y2="18"/><line x1="20" y1="10" x2="20" y2="14"/></svg>
-      </div>
-      <div class="audio-nudge-copy">
-        <span class="audio-nudge-headline">Hear it from Anchit</span>
-        <span class="audio-nudge-sub">Let him tell his own journey · ~2 min</span>
-      </div>
-      <button class="audio-nudge-play-btn" id="audioPlayBtn" aria-label="Play Anchit's narration">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Play
-      </button>
-      <button class="audio-nudge-dismiss-btn" id="audioNudgeDismiss" aria-label="Dismiss narration bar">✕</button>
-    </div>
-    <!-- Player: mini-player while audio runs -->
-    <div class="audio-nudge-player">
-      <button class="anp-btn" id="anpPausePlay" aria-label="Pause">
-        <svg id="anpPauseIcon" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        <svg id="anpPlayIcon"  width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="display:none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </button>
-      <span class="anp-label" id="anpLabel">Anchit's story</span>
-      <div class="anp-progress" id="anpProgress" title="Click to seek">
-        <div class="anp-progress-fill" id="anpFill"></div>
-      </div>
-      <span class="anp-time" id="anpTime">0:00</span>
-      <button class="anp-stop-btn" id="anpStop" aria-label="Stop narration">■ Stop</button>
-    </div>
-  </div>
 
   <!-- HOME -->
   <section class="view active" id="view-home">
