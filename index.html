@@ -1471,8 +1471,12 @@
 
   <nav class="sidebar-nav">
     <a class="sidebar-item active" href="#home" data-view="home" aria-label="Home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="sidebar-label">Home</span>
+    </a>
+    <a class="sidebar-item" href="#chat" data-view="chat" aria-label="Chat with Me">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="sidebar-label">Chat</span>
     </a>
     <a class="sidebar-item" href="#about" data-view="about" aria-label="About Me">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1575,19 +1579,94 @@
     </div>
 
     <div class="container">
-      <a class="hero-current-block reveal" href="#now" data-view="now">
-        <span class="dot"></span>
-        <span class="text">AGM — Product Management at <em>Vahdam India</em> since Apr 2026. D2C growth, CRM experimentation, conversion optimisation across US, UK &amp; global markets.</span>
-        <span class="arrow">See current role →</span>
-      </a>
+      <!-- Career Journey Timeline -->
+      <div class="section-head" style="margin-bottom: 32px;">
+        <div class="eyebrow">The journey · Click any phase to explore</div>
+      </div>
+      <div class="home-timeline">
+        <a class="home-tl-item" href="#now" data-view="now">
+          <div class="home-tl-dot" style="background: #B5870A; box-shadow: 0 0 12px rgba(181,135,10,0.4);"></div>
+          <div class="home-tl-content">
+            <div class="home-tl-year">2026 → Now</div>
+            <div class="home-tl-title">AGM — Product · <em>Vahdam India</em></div>
+            <div class="home-tl-desc">D2C growth across US, UK &amp; global. Ratings 2.4 → 4.0.</div>
+          </div>
+          <div class="home-tl-arrow">→</div>
+        </a>
+        <a class="home-tl-item" href="#experience" data-view="experience">
+          <div class="home-tl-dot" style="background: var(--primary-deep);"></div>
+          <div class="home-tl-content">
+            <div class="home-tl-year">2025 — 2026</div>
+            <div class="home-tl-title">Senior PM · <em>Times Internet</em></div>
+            <div class="home-tl-desc">Half Marathon 0→1. Scaled Assisted Sales. AI telesuite.</div>
+          </div>
+          <div class="home-tl-arrow">→</div>
+        </a>
+        <a class="home-tl-item" href="#experience" data-view="experience">
+          <div class="home-tl-dot" style="background: var(--primary);"></div>
+          <div class="home-tl-content">
+            <div class="home-tl-year">2023 — 2025</div>
+            <div class="home-tl-title">PM · <em>Times Internet</em></div>
+            <div class="home-tl-desc">ET Markets revamp ₹3Cr+ ARR. ET Prime 5× MRR. Health+ subscriptions.</div>
+          </div>
+          <div class="home-tl-arrow">→</div>
+        </a>
+        <a class="home-tl-item" href="#experience" data-view="experience">
+          <div class="home-tl-dot" style="background: var(--accent);"></div>
+          <div class="home-tl-content">
+            <div class="home-tl-year">2022 — 2023</div>
+            <div class="home-tl-title">APM · <em>Times Internet</em></div>
+            <div class="home-tl-desc">ET Markets discovery. The career pivot from engineering to product.</div>
+          </div>
+          <div class="home-tl-arrow">→</div>
+        </a>
+        <a class="home-tl-item" href="#experience" data-view="experience">
+          <div class="home-tl-dot" style="background: #6B4A9E;"></div>
+          <div class="home-tl-content">
+            <div class="home-tl-year">2020 — 2022</div>
+            <div class="home-tl-title">Software Engineer · <em>Tuple &amp; Citymall</em></div>
+            <div class="home-tl-desc">Backend systems. Live sports commentary. Product Owner.</div>
+          </div>
+          <div class="home-tl-arrow">→</div>
+        </a>
+        <a class="home-tl-item" href="#about" data-view="about">
+          <div class="home-tl-dot" style="background: #4A6FA5;"></div>
+          <div class="home-tl-content">
+            <div class="home-tl-year">2016 — 2020</div>
+            <div class="home-tl-title">B.Tech CSE · <em>VIT Vellore</em></div>
+            <div class="home-tl-desc">Where the engineering brain got built.</div>
+          </div>
+          <div class="home-tl-arrow">→</div>
+        </a>
+      </div>
 
-      <!-- Chat — full width -->
-      <div class="chat-block" style="margin-top: 24px;">
+      <!-- Dual CTAs -->
+      <div class="home-ctas">
+        <a class="home-cta primary" href="#chat" data-view="chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Talk to me</span>
+        </a>
+        <button class="home-cta secondary" id="heroListenBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <span>Hear this from me</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section class="view" id="view-chat">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Chat · Ask me anything</div>
+        <h1 class="display-lg">Let's have a <em>real conversation.</em></h1>
+      </div>
+      <div class="chat-block">
         <div class="chat-head">
           <div class="chat-head-avatar">A</div>
           <div class="chat-head-info">
             <div class="title">Talk with Anchit</div>
-            <div class="sub">Ask me anything about my work, builds, or career</div>
+            <div class="sub">Ask about my work, builds, career, or anything else</div>
           </div>
         </div>
         <div class="chat-body" id="chatBody"></div>
@@ -1603,7 +1682,6 @@
     </div>
   </section>
 
-  <!-- WORK -->
   <!-- NOW — Current Role -->
   <section class="view" id="view-now">
     <div class="container">
