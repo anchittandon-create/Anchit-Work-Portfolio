@@ -326,12 +326,82 @@
     margin-top: 16px; line-height: 1.5; max-width: 220px;
   }
 
+  /* ============ HOME IDENTITY + CHAT GRID ============ */
+  .home-identity-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 860px) {
+    .home-identity-row { grid-template-columns: 1fr; }
+  }
+  .identity-card {
+    background: var(--bg-elev); border-radius: 28px;
+    border: 1px solid var(--rule);
+    padding: 28px 28px 24px;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .identity-prose {
+    font-family: var(--font-display); font-weight: 300;
+    font-size: clamp(15px, 1.5vw, 17px); line-height: 1.65; color: var(--ink);
+  }
+  .identity-prose p { margin: 0 0 14px; }
+  .identity-prose p:last-child { margin-bottom: 0; }
+  .identity-prose em { font-style: italic; color: var(--primary); }
+  .identity-divider {
+    height: 1px; background: var(--rule); margin: 22px 0;
+  }
+  .identity-meta {
+    display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px;
+  }
+  .identity-row {
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .identity-meta-key {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--ink-mute); min-width: 58px; flex-shrink: 0;
+  }
+  .identity-meta-val {
+    font-size: 13.5px; color: var(--ink); line-height: 1.45;
+  }
+  .identity-meta-val strong { font-weight: 600; }
+  .identity-skills {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px;
+  }
+  .skill-tag {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-dim);
+    background: var(--bg-deep); border: 1px solid var(--rule);
+    border-radius: 99px; padding: 5px 11px;
+  }
+  .identity-proof {
+    display: flex; gap: 0; border-top: 1px solid var(--rule); padding-top: 18px;
+  }
+  .identity-proof-item {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+    padding-right: 16px; border-right: 1px solid var(--rule);
+    margin-right: 16px;
+  }
+  .identity-proof-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+  .identity-proof-num {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(26px, 3vw, 36px); line-height: 1; letter-spacing: -0.03em;
+    color: var(--ink); font-variation-settings: "SOFT" 70, "WONK" 1;
+  }
+  .identity-proof-num em { font-style: italic; color: var(--primary); }
+  .identity-proof-label {
+    font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--ink-dim); line-height: 1.4;
+  }
+
   /* Currently strip */
   .hero-current-block {
     background: var(--ink); color: var(--bg);
     border-radius: 20px; padding: 28px 32px;
     display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-    margin-bottom: 64px;
+    margin-bottom: 48px;
     transition: transform 0.3s ease;
   }
   .hero-current-block:hover { transform: translateY(-2px); }
@@ -358,7 +428,6 @@
     background: var(--bg-elev); border-radius: 28px;
     box-shadow: var(--shadow-md);
     overflow: hidden;
-    margin-bottom: 32px;
   }
   .chat-head {
     padding: 28px 32px 20px; border-bottom: 1px solid var(--rule);
@@ -1379,11 +1448,71 @@
         </h1>
         <p class="hero-tagline">An <span class="hero-strike">engineer</span> who learned to <em>love the funnel.</em> Six years building and shipping — Times Internet, Vahdam India, four AI side projects live.</p>
 
-        <div class="hero-stats reveal-stagger">
-          <div class="hero-stat"><div class="num"><em class="counter" data-count="6" data-suffix="+">6+</em></div><div class="label">Years in product &amp; engineering</div></div>
-          <div class="hero-stat"><div class="num"><em>5×</em></div><div class="label">MRR growth · Assisted Sales (₹15L → ₹80L)</div></div>
-          <div class="hero-stat"><div class="num">₹3<em>Cr</em>+</div><div class="label">Incremental ARR unlocked · ET Markets revamp</div></div>
-          <div class="hero-stat"><div class="num"><em class="counter" data-count="4">4</em></div><div class="label">Side projects shipped &amp; live</div></div>
+        <div class="home-identity-row reveal">
+          <!-- Identity card -->
+          <div class="identity-card">
+            <div class="identity-prose">
+              <p>I started as a backend engineer building consumer apps — the kinds of systems where you watch your code touch a million people in a weekend.</p>
+              <p>Then I moved to product, and what I fell for was <em>the funnel</em> — the unfiltered truth about whether your decisions actually matter.</p>
+              <p>These days I'm AGM – Product at Vahdam India, spearheading D2C growth across the US, UK, and global markets. Before this, nearly four years at Times Internet — APM to Senior PM. Still writing code every weekend; all four side projects are mine, end-to-end.</p>
+            </div>
+            <div class="identity-divider"></div>
+            <div class="identity-meta">
+              <div class="identity-row">
+                <span class="identity-meta-key">Now</span>
+                <span class="identity-meta-val"><strong>AGM – Product Management</strong> · Vahdam India · Delhi</span>
+              </div>
+              <div class="identity-row">
+                <span class="identity-meta-key">Open to</span>
+                <span class="identity-meta-val">Remote &amp; hybrid · D2C · Consumer tech · AI-native products</span>
+              </div>
+              <div class="identity-row">
+                <span class="identity-meta-key">Education</span>
+                <span class="identity-meta-val">B.Tech CSE · VIT Vellore · 2020</span>
+              </div>
+            </div>
+            <div class="identity-skills">
+              <span class="skill-tag">Growth funnels</span>
+              <span class="skill-tag">0→1 products</span>
+              <span class="skill-tag">Subscriptions</span>
+              <span class="skill-tag">A/B testing</span>
+              <span class="skill-tag">AI &amp; LLMs</span>
+              <span class="skill-tag">Backend eng.</span>
+            </div>
+            <div class="identity-proof">
+              <div class="identity-proof-item">
+                <div class="identity-proof-num"><em>5×</em></div>
+                <div class="identity-proof-label">MRR growth<br>Assisted Sales</div>
+              </div>
+              <div class="identity-proof-item">
+                <div class="identity-proof-num">₹3<em>Cr</em>+</div>
+                <div class="identity-proof-label">Incremental ARR<br>ET Markets</div>
+              </div>
+              <div class="identity-proof-item">
+                <div class="identity-proof-num"><em>4</em></div>
+                <div class="identity-proof-label">AI side builds<br>all live</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat -->
+          <div class="chat-block">
+            <div class="chat-head">
+              <div class="chat-head-avatar">A</div>
+              <div class="chat-head-info">
+                <div class="title">Talk with Anchit</div>
+                <div class="sub">Online now · usually replies in seconds</div>
+              </div>
+            </div>
+            <div class="chat-body" id="chatBody"></div>
+            <div class="chips" id="chipRow"></div>
+            <div class="chat-input">
+              <input type="text" id="chatInput" placeholder="Ask me anything…" autocomplete="off" />
+              <button class="chat-send" id="chatSend" aria-label="Send">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
         </div>
 
         <a class="hero-current-block reveal" href="#work" data-view="work">
@@ -1391,24 +1520,6 @@
           <span class="text">Currently spearheading <em>D2C growth at Vahdam India</em> — product, CRM, experimentation across US, UK &amp; global.</span>
           <span class="arrow">See the work →</span>
         </a>
-
-        <div class="chat-block reveal">
-          <div class="chat-head">
-            <div class="chat-head-avatar">A</div>
-            <div class="chat-head-info">
-              <div class="title">Talk with Anchit</div>
-              <div class="sub">Online now · usually replies in seconds</div>
-            </div>
-          </div>
-          <div class="chat-body" id="chatBody"></div>
-          <div class="chips" id="chipRow"></div>
-          <div class="chat-input">
-            <input type="text" id="chatInput" placeholder="Ask me anything…" autocomplete="off" />
-            <button class="chat-send" id="chatSend" aria-label="Send">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </section>
