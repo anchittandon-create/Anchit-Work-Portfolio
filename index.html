@@ -109,15 +109,15 @@
     transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
   }
   .sidebar-logo {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--primary); color: #FFF;
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 8px;
-    margin: 0 10px 20px; flex-shrink: 0;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: block;
+    font-family: var(--font-display); font-weight: 500; font-style: italic;
+    font-size: 16px; line-height: 1.15; letter-spacing: -0.02em;
+    color: #FBF5EC;
+    margin: 0 14px 24px; flex-shrink: 0;
+    transition: color 0.2s;
   }
-  .sidebar-logo svg { width: 100%; height: 100%; }
-  .sidebar-logo:hover { transform: rotate(-15deg) scale(1.08); }
+  .sidebar-logo span { color: var(--primary); }
+  .sidebar-logo:hover { color: var(--primary); }
   .sidebar-nav {
     flex: 1; display: flex; flex-direction: column; align-items: stretch;
     gap: 2px; width: 100%; overflow-y: auto; scrollbar-width: none;
@@ -1010,6 +1010,53 @@
     .af-active { width: 200px; }
   }
 
+  /* ============ FLOATING AUDIO NUDGE + PLAYER ============ */
+  .anp-nudge {
+    position: fixed; bottom: calc(24px + var(--safe-bottom)); right: 24px;
+    z-index: 160; display: flex; align-items: center; gap: 8px;
+    background: var(--bg-elev); border: 1px solid var(--rule-strong);
+    border-radius: 99px; padding: 6px 8px 6px 6px;
+    box-shadow: var(--shadow-md);
+  }
+  .anp-nudge.dismissed { display: none; }
+  .anp-play-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary); color: #FFF; border: none; cursor: pointer;
+    border-radius: 99px; padding: 8px 14px 8px 10px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .anp-play-btn:hover { background: var(--primary-deep); }
+  .anp-play-btn svg { width: 14px; height: 14px; }
+  .anp-nudge.playing .anp-play-btn,
+  .anp-nudge.paused .anp-play-btn { display: none; }
+  .anp-player { display: none; align-items: center; gap: 8px; }
+  .anp-nudge.playing .anp-player,
+  .anp-nudge.paused .anp-player { display: flex; }
+  .anp-label {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-dim);
+    white-space: nowrap;
+  }
+  .anp-progress { width: 80px; height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+  .anp-fill { height: 100%; width: 0%; background: var(--primary); border-radius: 2px; }
+  .anp-time { font-family: var(--font-mono); font-size: 10px; color: var(--ink-dim); min-width: 28px; text-align: right; }
+  .anp-btn {
+    width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--bg-deep); color: var(--ink-dim);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .anp-btn:hover { background: var(--primary); color: #FFF; }
+  .anp-btn svg { width: 14px; height: 14px; }
+  .anp-dismiss {
+    width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer;
+    background: transparent; color: var(--ink-mute); font-size: 16px; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .anp-dismiss:hover { color: var(--primary); }
+  .anp-nudge.playing .anp-dismiss,
+  .anp-nudge.paused .anp-dismiss { display: none; }
+
   /* Chat TTS speaking state + caption */
   .msg.bot.speaking .msg-bubble { outline: 2px solid var(--primary); outline-offset: 1px; }
   .chat-caption {
@@ -1434,7 +1481,7 @@
 
 <!-- ============ SIDEBAR ============ -->
 <aside class="sidebar" id="sidebar">
-  <a class="sidebar-logo" href="#home" data-view="home" aria-label="Home"><svg viewBox="0 0 32 32" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3,28 L12.5,4 L22,28"/><line x1="6" y1="20" x2="19" y2="20"/><line x1="22" y1="4" x2="29" y2="4"/><line x1="25.5" y1="4" x2="25.5" y2="28"/></svg></a>
+  <a class="sidebar-logo" href="#home" data-view="home" aria-label="Home">Anchit<br><span>Tandon.</span></a>
 
   <nav class="sidebar-nav">
     <a class="sidebar-item active" href="#home" data-view="home" aria-label="Home">
@@ -1510,7 +1557,7 @@
         <h1 class="display-xl name">
           <span class="greeting">Hey, I'm </span><span class="firstline">Anchit </span><span class="secondline">Tandon.</span>
         </h1>
-        <p class="hero-persona">Product leader. Engineer by training. Builder by instinct. <em>Relentlessly curious.</em></p>
+        <p class="hero-persona">An <em>engineer</em> who learned to love the funnel.</p>
         <p class="hero-tagline">AGM — Product Management at <em>Vahdam India.</em> Scaled Assisted Sales 5× to ₹80L MRR, revamped ET Markets to ₹3Cr+ ARR, shipped 11 products across companies and side projects.</p>
       </div>
     </div>
@@ -2170,9 +2217,9 @@
         <div class="iframe-bar">
           <div class="dots"><span></span><span></span><span></span></div>
           <span>Anchit_Tandon_Resume.pdf</span>
-          <a href="assets/resume.pdf" download style="margin-left:auto; color:var(--primary); font-weight:500; text-decoration:none;">Download ↓</a>
+          <a href="https://raw.githubusercontent.com/anchittandon-create/Anchit-Work-Portfolio/main/assets/resume.pdf" download style="margin-left:auto; color:var(--primary); font-weight:500; text-decoration:none;">Download ↓</a>
         </div>
-        <iframe src="assets/resume.pdf" title="Anchit Tandon Resume" style="height:700px;"></iframe>
+        <iframe src="https://docs.google.com/gview?url=https://raw.githubusercontent.com/anchittandon-create/Anchit-Work-Portfolio/main/assets/resume.pdf&embedded=true" title="Anchit Tandon Resume" style="height:700px; width:100%; border:0;"></iframe>
       </div>
     </div>
   </section>
@@ -2215,6 +2262,27 @@
   <div class="audio-ambient-bars">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
+</div>
+
+<!-- Floating audio nudge + mini player -->
+<div class="anp-nudge" id="audioNudge">
+  <button class="anp-play-btn" id="audioPlayBtn" aria-label="Listen to this page">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    <span>Listen</span>
+  </button>
+  <div class="anp-player">
+    <span class="anp-label" id="anpLabel">Home</span>
+    <div class="anp-progress" id="anpProgress"><div class="anp-fill" id="anpFill"></div></div>
+    <span class="anp-time" id="anpTime">0:00</span>
+    <button class="anp-btn" id="anpPausePlay" aria-label="Pause / Play">
+      <svg id="anpPauseIcon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      <svg id="anpPlayIcon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="display:none;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </button>
+    <button class="anp-btn" id="anpStop" aria-label="Stop">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+    </button>
+  </div>
+  <button class="anp-dismiss" id="audioNudgeDismiss" aria-label="Dismiss">×</button>
 </div>
 
 <!-- Cursor glow -->
@@ -2542,7 +2610,7 @@
 
   // Initial bot message
   setTimeout(() => {
-    addBot("Hi — I'm an AI built on everything Anchit knows about himself. Ask me about his <a data-nav='experience'>work</a>, <a data-nav='projects'>side builds</a>, career path, or what he's solving right now. I'll give you the real story, not a resume summary.");
+    addBot("Hey, I'm Anchit. Ask me anything — my <a data-nav='experience'>work</a>, my <a data-nav='projects'>side projects</a>, why I moved from engineering to product, or what I'm solving right now. I'm direct — let's get into it.");
     renderChips(DEFAULT_CHIPS);
   }, 350);
 
