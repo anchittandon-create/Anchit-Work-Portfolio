@@ -18,6 +18,8 @@ const assets = [
   'manifest.json',
   'sw.js',
   'icons',
+  'assets',
+  'audio',
 ];
 
 async function main() {
