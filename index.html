@@ -110,13 +110,13 @@
   }
   .sidebar-logo {
     display: block;
-    font-family: var(--font-display); font-weight: 500; font-style: italic;
-    font-size: 16px; line-height: 1.15; letter-spacing: -0.02em;
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 22px; line-height: 1.1; letter-spacing: -0.03em;
     color: #FBF5EC;
-    margin: 0 14px 24px; flex-shrink: 0;
+    margin: 0 14px 28px; flex-shrink: 0;
     transition: color 0.2s;
   }
-  .sidebar-logo span { color: var(--primary); }
+  .sidebar-logo span { display: block; color: var(--primary); font-style: italic; font-weight: 500; }
   .sidebar-logo:hover { color: var(--primary); }
   .sidebar-nav {
     flex: 1; display: flex; flex-direction: column; align-items: stretch;
@@ -195,6 +195,7 @@
     overflow: hidden; display: flex; align-items: center;
     border-top: 1px solid var(--primary-deep);
     border-bottom: 1px solid var(--primary-deep);
+    margin: 24px 0;
   }
   .ticker-track {
     display: flex; gap: 48px; white-space: nowrap;
@@ -276,7 +277,7 @@
   .lede em { font-style: italic; color: var(--primary); font-weight: 400; }
 
   /* ============ HOME / HERO ============ */
-  .home-hero { padding-top: clamp(20px, 3.5vw, 48px); padding-bottom: clamp(20px, 2.5vw, 32px); }
+  .home-hero { padding-top: clamp(20px, 3.5vw, 48px); padding-bottom: 0; margin-bottom: 0; }
   .home-hero .eyebrow { margin-bottom: 20px; }
   /* Name headline — all on one line */
   .home-hero .greeting {
@@ -303,7 +304,7 @@
   .hero-tagline {
     font-family: var(--font-display); font-weight: 300;
     font-size: clamp(16px, 1.8vw, 21px); line-height: 1.5;
-    color: var(--ink-dim); max-width: 780px; margin-bottom: 40px;
+    color: var(--ink-dim); max-width: 780px; margin-bottom: 0;
   }
   .hero-tagline em { font-style: italic; color: var(--primary); font-weight: 400; }
   /* Hero stats — big, confident */
@@ -1574,7 +1575,7 @@
     </div>
 
     <div class="container">
-      <div class="home-identity-row reveal" style="margin-top: clamp(20px, 2.5vw, 32px);">
+      <div class="home-identity-row reveal">
           <!-- Identity card -->
           <div class="identity-card">
             <div class="identity-prose">
