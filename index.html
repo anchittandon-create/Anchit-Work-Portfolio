@@ -637,6 +637,11 @@
   .chip:hover { background: var(--primary-soft); border-color: rgba(255,77,31,0.35); color: var(--primary); transform: translateX(2px); }
   .chip:hover::after { color: var(--primary); }
   @keyframes chipIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+  /* Tighten chips on iPhone-SE class widths so the bullets don't overflow. */
+  @media (max-width: 380px) {
+    .chips { padding: 8px 10px 10px; gap: 4px; }
+    .chip { font-size: 11px; padding: 8px 10px; border-radius: 8px; }
+  }
 
   .chat-input {
     display: flex; gap: 8px; align-items: center;
@@ -1634,11 +1639,11 @@
       </a>
     </div>
     <div class="top-bar-actions">
-      <a href="#chat" data-view="chat" class="top-bar-cta talk">
+      <a href="#chat" data-view="chat" class="top-bar-cta talk" aria-label="Talk to me" title="Talk to me">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span class="cta-label">Talk to me</span>
       </a>
-      <button class="top-bar-cta listen" id="topBarListenBtn">
+      <button class="top-bar-cta listen" id="topBarListenBtn" aria-label="Hear this page" title="Hear this page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <span class="cta-label">Hear this page</span>
       </button>
@@ -2545,14 +2550,29 @@
   });
 
   /* ============ SIDEBAR COLLAPSE (desktop) ============ */
-  if (localStorage.getItem('anchit-sidebar-collapsed') === '1') {
+  // Safari Intelligent Tracking Prevention can clear localStorage after long
+  // inactivity. Read both stores and write to both so a clean Safari reload
+  // doesn't lose the user's collapsed-sidebar preference.
+  function readSidebarCollapsed() {
+    try {
+      const ls = localStorage.getItem('anchit-sidebar-collapsed');
+      if (ls !== null) return ls === '1';
+    } catch {}
+    return (document.cookie.match(/(?:^|; )sb_collapsed=(\d)/)?.[1] === '1');
+  }
+  function writeSidebarCollapsed(collapsed) {
+    try { localStorage.setItem('anchit-sidebar-collapsed', collapsed ? '1' : '0'); } catch {}
+    // 1-year same-site cookie as fallback when localStorage is purged
+    document.cookie = `sb_collapsed=${collapsed ? 1 : 0}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+  }
+  if (readSidebarCollapsed()) {
     document.body.classList.add('sidebar-collapsed');
   }
   const sidebarCollapseBtn = document.getElementById('sidebarCollapseBtn');
   if (sidebarCollapseBtn) {
     sidebarCollapseBtn.addEventListener('click', () => {
       const collapsed = document.body.classList.toggle('sidebar-collapsed');
-      localStorage.setItem('anchit-sidebar-collapsed', collapsed ? '1' : '0');
+      writeSidebarCollapsed(collapsed);
       sidebarCollapseBtn.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
     });
   }
