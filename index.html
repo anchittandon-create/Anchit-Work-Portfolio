@@ -1779,6 +1779,7 @@
         <a class="product-chip" href="https://the-third-eye-anchit.vercel.app/" target="_blank" style="cursor:pointer;"><div class="product-chip-name">The Third Eye</div><div class="product-chip-co">AI OS · Personal</div><div class="product-chip-metric">Agent-orchestrated AI OS</div></a>
         <a class="product-chip" href="https://marketing-mailers-html-architect.vercel.app/" target="_blank" style="cursor:pointer;"><div class="product-chip-name">Mailer Architect</div><div class="product-chip-co">AI Tooling · Marketing</div><div class="product-chip-metric">6-LLM cascade → HTML email</div></a>
         <a class="product-chip" href="https://vahdam-dtc-data-engine.vercel.app/" target="_blank" style="cursor:pointer;"><div class="product-chip-name">DTC Data Engine</div><div class="product-chip-co">Data Eng · D2C</div><div class="product-chip-metric">Shopify+Klaviyo+WE → DuckDB</div></a>
+        <a class="product-chip" href="#project-lifecycle" data-view="project-lifecycle" style="cursor:pointer;"><div class="product-chip-name">Lifecycle OS</div><div class="product-chip-co">D2C Retention · PWA</div><div class="product-chip-metric">Dashboard → calendar → mailers</div></a>
       </div>
     </div>
   </section>
@@ -1974,7 +1975,7 @@
       <div class="section-head reveal">
         <div class="eyebrow">Personal projects · All live · Built end-to-end</div>
         <h1 class="display-lg">Side Projects</h1>
-        <p class="lede" style="margin-top: 16px;">Five AI-first experiments, built end-to-end on weekends and evenings out of curiosity and love for technology. <em>Ideas that wouldn't wait for permission.</em></p>
+        <p class="lede" style="margin-top: 16px;">Eight AI-first experiments, built end-to-end on weekends and evenings out of curiosity and love for technology. <em>Ideas that wouldn't wait for permission.</em></p>
       </div>
 
       <div class="builds-grid reveal-stagger">
@@ -2025,6 +2026,13 @@
           <h3>DTC Data <em>Engine</em></h3>
           <p>A DuckDB analytics layer that fuses Shopify, Klaviyo, and WebEngage into one queryable warehouse — with a metric registry, navigable strategy dashboards, and growth-pillar attribution.</p>
           <div class="build-stack"><span class="tag">DuckDB</span><span class="tag">Python</span><span class="tag">Shopify</span><span class="tag">Klaviyo</span><span class="tag">WebEngage</span></div>
+          <span class="build-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </a>
+        <a class="build-card tilt-card" href="#project-lifecycle" data-view="project-lifecycle">
+          <div class="build-tag"><span>Lifecycle OS · D2C Retention</span><span class="status">Live</span></div>
+          <h3>VAHDAM <em>Lifecycle OS</em></h3>
+          <p>One workflow that reads your campaign + customer + order data, builds a retention dashboard, generates a 30-day mailer calendar tuned to RFM segments &amp; festivals, then drafts every email through the brand-locked Mailer Studio. Installable as a PWA.</p>
+          <div class="build-stack"><span class="tag">Supabase</span><span class="tag">ApexCharts</span><span class="tag">Vercel Functions</span><span class="tag">7-LLM Cascade</span><span class="tag">PWA</span></div>
           <span class="build-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </a>
       </div>
@@ -2454,6 +2462,64 @@
     </div>
   </section>
 
+  <!-- PROJECT: VAHDAM LIFECYCLE OS -->
+  <section class="view" id="view-project-lifecycle">
+    <div class="container">
+      <a class="back-link" href="#projects" data-view="projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All side projects
+      </a>
+      <div class="project-hero reveal">
+        <div class="eyebrow">D2C Retention · Marketing Calendar · Mailer Creator · Installable PWA</div>
+        <h1 class="display-lg">VAHDAM <em>Lifecycle OS</em></h1>
+        <p class="quote">"Stop guessing what to send next — one workflow from data to plan to mailers."</p>
+        <div class="project-meta">
+          <div><span class="label">Role</span><span>Architect · Builder</span></div>
+          <div><span class="label">Status</span><span>Live · Powering the retention queue</span></div>
+          <div><span class="label">Stack</span><span>Supabase · ApexCharts · Vercel Functions · 7-LLM Cascade · PWA</span></div>
+        </div>
+        <div class="project-cta">
+          <a href="https://vahdam-lifecycle-os.vercel.app/" target="_blank" rel="noopener" class="btn primary">Open live app ↗</a>
+          <a href="https://github.com/Anchit-s-AI-Hustle/vahdam-lifecycle-os" target="_blank" rel="noopener" class="btn">View source ↗</a>
+        </div>
+      </div>
+
+      <div class="project-section reveal">
+        <div class="eyebrow">The pitch</div>
+        <h2>What it is</h2>
+        <p>Three tools, one workflow, one Google sign-in. Stage 1 reads your campaign + customer + order data and builds an executive-grade retention dashboard — RFM segments, cohort retention, send-time heatmaps, cross-sell affinity, all currency-aware (USD ⇄ INR). Stage 2 turns that analysis into a 30-day marketing calendar, festival-aware across 11 markets, with cadence guards per segment. Stage 3 runs every row through the brand-locked Mailer Studio — strategy → variant → image cascade → HTML — and hands you four ready-to-ship variants per send. The whole thing installs from the address bar as a PWA.</p>
+      </div>
+
+      <div class="project-section reveal">
+        <div class="eyebrow">Origin</div>
+        <h2>Why I built it</h2>
+        <p>At Vahdam, the retention workflow was three disconnected tools and a calendar nobody trusted. Analytics in one tab, a spreadsheet plan in another, the email builder in a third — every Monday started with someone reconciling, not deciding. I wanted one place where the data already knew what to send, the calendar respected segment fatigue and cultural moments, and the mailer itself was already drafted on-brand before the meeting started.</p>
+      </div>
+
+      <div class="project-section reveal">
+        <div class="eyebrow">Problem it solves</div>
+        <h2>What's broken without it</h2>
+        <ul>
+          <li><strong>Disjointed stack.</strong> Dashboard, calendar and mailer normally live in three vendors with three logins. Lifecycle OS unifies them under one Google sign-in.</li>
+          <li><strong>Calendar drift.</strong> Send plans ignore segment cadence and cultural calendars. The planner enforces sends-per-week per segment and overlays a festivals dataset across 11 regions (US/UK/Global/IN/ME/AU/EU/CA/JP/SG).</li>
+          <li><strong>Mailer cold start.</strong> Every send begins from a blank brief. Each calendar row hands the Studio a pre-generated strategy + four variants (2 image, 2 text) tied to the right product/collection URL.</li>
+          <li><strong>Exec-grade exports.</strong> Colour-preserving Excel of every dashboard table plus a "complete analysis" workbook compiled live from the linked Supabase views — schedulable, no spreadsheet of truth.</li>
+        </ul>
+      </div>
+
+      <div class="project-section reveal">
+        <div class="eyebrow">What I'd build next</div>
+        <h2>The roadmap in my head</h2>
+        <p>Auto-daily send queue with a one-click "ship the plan" mode, anomaly detection on the retention curve, predictive cohort forecasts, and a slash-command interface so the dashboard answers "what's UK revenue last Tuesday" in plain English. Plus deeper hand-off into the Studio — direct image-variant render in the calendar drawer, no extra step.</p>
+      </div>
+
+      <div class="iframe-wrap reveal">
+        <div class="iframe-bar"><div class="dots"><span></span><span></span><span></span></div>vahdam-lifecycle-os.vercel.app</div>
+        <iframe src="https://vahdam-lifecycle-os.vercel.app/" loading="lazy" title="VAHDAM Lifecycle OS live preview"></iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- RESUME -->
   <section class="view" id="view-resume">
     <div class="container">
@@ -2536,7 +2602,7 @@
 
 <script>
   /* ============ STATE ============ */
-  const ALL_VIEWS = ['home','chat','experience','projects','resume','contact','project-yaara','project-music','project-telesuite','project-lifeengine','project-thirdeye','project-mailer','project-dtc'];
+  const ALL_VIEWS = ['home','chat','experience','projects','resume','contact','project-yaara','project-music','project-telesuite','project-lifeengine','project-thirdeye','project-mailer','project-dtc','project-lifecycle'];
   let audioModeEnabled = false; // true once user has clicked Play — gates TTS for chat
   const root = document.documentElement;
 
