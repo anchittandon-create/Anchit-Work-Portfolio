@@ -2668,6 +2668,7 @@
   const navLinks = document.querySelectorAll('[data-view]');
 
   function switchView(viewName, anchorId) {
+    if (viewName === 'schedule') { if (window.openScheduleModal) window.openScheduleModal(); return; }
     if (!ALL_VIEWS.includes(viewName)) return;
 
     // Animate out old view, animate in new
@@ -2813,6 +2814,9 @@
     { keywords: ['experience','career','journey','timeline','history','worked at','companies','times internet'],
       response: "Quick timeline: VIT CSE (2016–20) → Tuple Technologies, backend (2020–22) → Citymall, backend (2022) → Times Internet, APM to Senior PM (2022–26) → Vahdam India, AGM Product (2026–now). The thread: started building systems, then products, then growth. Each step compounded the last. <a data-nav='experience'>Full timeline →</a>",
       nextChips: ["Why switch to product?","Tell me about Times Internet","Tell me about Vahdam","How do I reach you?"] },
+    { keywords: ['book','schedule','call','meet','meeting','calendar','appointment','connect','catch up','hop on','available','talk to you'],
+      response: "Let's actually talk — I keep 15-min intro slots for a quick Google Meet. <a data-nav='schedule'>Open the scheduler →</a> and you'll get a calendar invite with a Meet link (me + you, both emailed). Prefer async first? <a href='mailto:anchit.tandon@gmail.com'>anchit.tandon@gmail.com</a> · WhatsApp/call <a href='tel:+919873945238'>+91 98739 45238</a>.",
+      nextChips: ["Book a 15-min Meet","What should we discuss?","Show me your work","Your resume"] },
     { keywords: ['voice','voice ai'],
       response: "Voice is a thread that runs through my work. Hey Yaara is voice-first — an AI companion for the elderly where the entire interface is conversation. At Times Internet, the AI telesuite processed voice in real-time for sales transcription and pitch scoring. I think voice removes the biggest friction of all: having to learn an interface. <a data-nav='project-yaara'>See Hey Yaara →</a>",
       nextChips: ["Tell me about Hey Yaara","What's the AI telesuite?","Tell me about MusicGenAI","Your AI stack?"] },
@@ -2954,7 +2958,7 @@
       hideTyping();
       const m = findMatch(text);
       if (m) { addBot(m.response); renderChips(m.nextChips || DEFAULT_CHIPS); }
-      else { addBot("Hmm, I don't have a sharp answer for that one yet. Try asking about my work at Vahdam or Times Internet, side builds (Hey Yaara, Jarvis, MusicGenAI), why I moved from engineering to product, or what makes me tick. Or skip the bot — <a href='mailto:anchit.tandon@gmail.com'>anchit.tandon@gmail.com</a>."); renderChips(DEFAULT_CHIPS); }
+      else { addBot("Here's my honest quick take: most of what I work on lives at the crossroads of <b>product, growth and AI</b> — so the real answer usually depends on the specific funnel or goal. Rather than hand-wave, I'd give you a precise answer directly. The fastest way: <a data-nav='schedule'>book a 15-min Google Meet →</a>, or reach me at <a href='mailto:anchit.tandon@gmail.com'>anchit.tandon@gmail.com</a> / <a href='tel:+919873945238'>+91 98739 45238</a>. Meanwhile, want me to walk you through my work, a project, or how I think about product?"); renderChips(["Walk me through your work","Show me a project","Book a quick call","Why product over engineering?"]); }
     }, 500 + Math.random() * 400);
   }
 
@@ -3393,6 +3397,94 @@
       navigator.serviceWorker.register('sw.js').catch(() => {});
     });
   }
+</script>
+
+<!-- ───────── Schedule-a-call modal (Google Meet invite) ───────── -->
+<div id="schedModal" role="dialog" aria-modal="true" aria-labelledby="schedTitle" style="position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);">
+  <div style="max-width:460px;width:100%;max-height:90vh;overflow-y:auto;background:var(--bg-elev,#fff);border:1px solid var(--rule,#e5dcc7);border-radius:18px;padding:24px 22px 26px;font-family:inherit;box-shadow:0 30px 80px rgba(0,0,0,.4);">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--primary,#ff4d1f);">Let's talk</div>
+        <h2 id="schedTitle" style="font-size:22px;margin-top:6px;color:var(--ink,#161312);">Book a 15-min Google Meet</h2>
+      </div>
+      <button type="button" id="schedClose" aria-label="Close" style="background:none;border:0;color:var(--ink-mute,#a39e94);font-size:26px;line-height:1;cursor:pointer;">×</button>
+    </div>
+    <p style="color:var(--ink-dim,#5a554e);font-size:13.5px;line-height:1.6;margin-bottom:18px;">Pick a time and add your details. You'll get a Google Calendar invite with a Meet link — and so will I. I'll confirm on WhatsApp too.</p>
+    <form id="schedForm" novalidate>
+      <label class="sf-l">Your name</label>
+      <input id="sf-name" class="sf-i" type="text" autocomplete="name" placeholder="Jane Doe">
+      <label class="sf-l">Your email</label>
+      <input id="sf-email" class="sf-i" type="email" autocomplete="email" placeholder="jane@company.com">
+      <label class="sf-l">Your mobile (WhatsApp)</label>
+      <input id="sf-phone" class="sf-i" type="tel" autocomplete="tel" placeholder="+91 98765 43210">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><label class="sf-l">Date</label><input id="sf-date" class="sf-i" type="date" style="color-scheme:light;"></div>
+        <div><label class="sf-l">Time</label><input id="sf-time" class="sf-i" type="time" style="color-scheme:light;"></div>
+      </div>
+      <div id="sf-err" style="color:#d92d20;font-size:12.5px;margin-top:10px;display:none;"></div>
+      <button type="submit" style="width:100%;margin-top:18px;background:var(--primary,#ff4d1f);color:#fff;border:0;border-radius:11px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Create the invite →</button>
+    </form>
+    <div id="sf-done" style="display:none;">
+      <p style="color:var(--ink,#161312);font-size:14px;line-height:1.6;margin-bottom:16px;">Two quick steps to lock it in:</p>
+      <a id="sf-gcal" href="#" target="_blank" rel="noopener" class="sf-step">📅 <span><b>Add to Google Calendar</b> — invites you + me, with a Meet link</span></a>
+      <a id="sf-wa" href="#" target="_blank" rel="noopener" class="sf-step">💬 <span><b>Confirm on WhatsApp</b> — sends me the details</span></a>
+      <button type="button" id="sf-again" style="margin-top:14px;background:none;border:0;color:var(--ink-dim,#5a554e);font-size:12.5px;cursor:pointer;text-decoration:underline;">← Change details</button>
+    </div>
+  </div>
+</div>
+<style>
+  #schedModal .sf-l{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-dim,#5a554e);margin:0 0 5px;font-weight:600;}
+  #schedModal .sf-i{width:100%;background:var(--bg,#fbf5ec);border:1px solid var(--rule,#e5dcc7);border-radius:10px;color:var(--ink,#161312);padding:11px 13px;font-size:14px;font-family:inherit;outline:none;margin-bottom:12px;}
+  #schedModal .sf-i:focus{border-color:var(--primary,#ff4d1f);}
+  #schedModal .sf-step{display:flex;align-items:center;gap:10px;background:var(--bg,#fbf5ec);border:1px solid var(--rule,#e5dcc7);border-radius:11px;padding:13px 15px;margin-bottom:10px;text-decoration:none;color:var(--ink,#161312);font-size:13.5px;}
+  #schedModal .sf-step:hover{border-color:var(--primary,#ff4d1f);}
+</style>
+<script>
+(function(){
+  var HOST_EMAIL="anchit.tandon@gmail.com", HOST_WA="919873945238";
+  var modal=document.getElementById('schedModal'), form=document.getElementById('schedForm'), done=document.getElementById('sf-done'), err=document.getElementById('sf-err');
+  window.openScheduleModal=function(){
+    form.style.display=''; done.style.display='none'; err.style.display='none';
+    var d=document.getElementById('sf-date'); if(d){var t=new Date(Date.now()+864e5);d.value=t.toISOString().slice(0,10);d.min=new Date().toISOString().slice(0,10);}
+    var tm=document.getElementById('sf-time'); if(tm&&!tm.value)tm.value="15:00";
+    modal.style.display='flex'; document.body.style.overflow='hidden';
+  };
+  function close(){ modal.style.display='none'; document.body.style.overflow=''; }
+  document.getElementById('schedClose').onclick=close;
+  modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.style.display==='flex') close(); });
+  document.getElementById('sf-again').onclick=function(){ form.style.display=''; done.style.display='none'; };
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  function cleanPhone(p){ return (p||'').replace(/[^\d+]/g,''); }
+  function validPhone(p){ var d=cleanPhone(p).replace(/^\+/,''); return d.length>=10 && d.length<=15; }
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function gfmt(dt){ return dt.getUTCFullYear()+pad(dt.getUTCMonth()+1)+pad(dt.getUTCDate())+'T'+pad(dt.getUTCHours())+pad(dt.getUTCMinutes())+'00Z'; }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=document.getElementById('sf-name').value.trim();
+    var email=document.getElementById('sf-email').value.trim();
+    var phone=document.getElementById('sf-phone').value.trim();
+    var date=document.getElementById('sf-date').value, time=document.getElementById('sf-time').value;
+    var probs=[];
+    if(name.length<2) probs.push("a valid name");
+    if(!EMAIL_RE.test(email)) probs.push("a valid email");
+    if(!validPhone(phone)) probs.push("a valid mobile (10–15 digits)");
+    if(!date||!time) probs.push("a date and time");
+    var start=new Date(date+'T'+time);
+    if(date&&time&&(isNaN(start)||start.getTime()<Date.now())) probs.push("a future time");
+    if(probs.length){ err.style.display='block'; err.textContent="Please enter "+probs.join(", ")+"."; return; }
+    err.style.display='none';
+    var end=new Date(start.getTime()+15*60000);
+    var title=encodeURIComponent("Intro call — "+name+" × Anchit Tandon");
+    var details=encodeURIComponent("15-min Google Meet.\nGuest: "+name+" ("+email+", "+phone+")\nHost: Anchit Tandon ("+HOST_EMAIL+", +91 98739 45238)\n\nGoogle attaches a Meet link and emails both guests.");
+    var gcal="https://calendar.google.com/calendar/render?action=TEMPLATE&text="+title+"&dates="+gfmt(start)+"/"+gfmt(end)+"&details="+details+"&add="+encodeURIComponent(HOST_EMAIL+","+email)+"&conferenceData=true&ctz="+encodeURIComponent(Intl.DateTimeFormat().resolvedOptions().timeZone||'Asia/Kolkata');
+    document.getElementById('sf-gcal').href=gcal;
+    var when=start.toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    var waMsg=encodeURIComponent("Hi Anchit, I'd like to book a 15-min Meet on "+when+".\nName: "+name+"\nEmail: "+email+"\nPhone: "+phone);
+    document.getElementById('sf-wa').href="https://wa.me/"+HOST_WA+"?text="+waMsg;
+    form.style.display='none'; done.style.display='block';
+  });
+})();
 </script>
 
 </body>
